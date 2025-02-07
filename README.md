@@ -10,3 +10,6 @@ I think
 1 is there a strong preference to seperate python?
 2 auth requirements?
 3 persistence
+
+- auth
+-
