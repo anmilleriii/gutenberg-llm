@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -61,7 +60,7 @@ export function SearchBooksForm() {
               <FormControl>
                 <Input autoFocus placeholder="1234567" {...field} />
               </FormControl>
-              <FormDescription>Search by Gutenberg Book ID</FormDescription>
+              {/* <FormDescription>Search by Gutenberg Book ID</FormDescription> */}
               <FormMessage />
             </FormItem>
           )}

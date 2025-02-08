@@ -1,6 +1,6 @@
 "use client";
 
-import { LucideIcon, SquareTerminal } from "lucide-react";
+import { LibraryBig, LucideIcon, Search } from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
@@ -34,13 +34,25 @@ const data = {
   navMain: [
     {
       title: "Explore",
-      url: "#",
-      icon: SquareTerminal,
+      url: "/explore",
+      icon: Search,
       isActive: true,
       items: [
         {
-          title: "By ID",
+          title: "Explore",
           url: "/explore",
+        },
+      ],
+    },
+    {
+      title: "Bookshelf",
+      url: "/bookshelf",
+      icon: LibraryBig,
+      isActive: true,
+      items: [
+        {
+          title: "Bookshelf",
+          url: "/bookshelf",
         },
       ],
     },
