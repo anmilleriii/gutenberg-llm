@@ -1,4 +1,3 @@
-import { MySidebar } from "@/lib/layout/sidebar";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -15,8 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Gutenberg LLM",
-  description: "Textual analysis of Gutenberg books",
-  // TODO
+  description:
+    "Explore and chat with books available through the Gutenberg project",
 };
 
 export default function RootLayout({
@@ -29,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <MySidebar>{children}</MySidebar>
+        {children}
       </body>
     </html>
   );

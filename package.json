@@ -1,5 +1,5 @@
 {
-  "name": "gutenberg-frontend",
+  "name": "gutenberg-llm",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,6 +8,7 @@
     "start": "next start",
     "test": "vitest",
     "lint": "next lint",
+    "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --name init"
   },
   "dependencies": {
