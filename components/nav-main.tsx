@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -17,12 +17,16 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import Image from "next/image";
 import { SidebarItem } from "./app-sidebar";
 
 export function NavMain({ items }: { items: SidebarItem[] }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Gutenberg LLM</SidebarGroupLabel>
+      <SidebarHeader className="flex flex-row items-end">
+        <Image src="/gutenberg.webp" alt="logo" width={28} height={28} />
+        <span className="text-sm ">Gutenberg LLM</span>
+      </SidebarHeader>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible

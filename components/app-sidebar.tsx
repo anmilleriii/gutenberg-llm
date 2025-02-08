@@ -56,30 +56,6 @@ const data = {
         },
       ],
     },
-    // {
-    //   title: "History",
-    //   url: "#",
-    //   icon: SquareTerminal,
-    //   isActive: true,
-    //   items: [
-    //     {
-    //       title: "History",
-    //       url: "/bookshelf",
-    //     },
-    //   ],
-    // },
-    // {
-    //   title: "Gutenberg LLM",
-    //   url: "#",
-    //   icon: SquareTerminal,
-    //   isActive: true,
-    //   items: [
-    //     {
-    //       title: "Sentiment Analysis",
-    //       url: "#",
-    //     },
-    //   ],
-    // },
   ] as SidebarItem[],
 };
 

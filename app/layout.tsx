@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Gutenberg LLM",
   description: "Textual analysis of Gutenberg books",
+  // TODO
 };
 
 export default function RootLayout({
