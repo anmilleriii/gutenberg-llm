@@ -2,8 +2,7 @@
 
 import { z } from "zod";
 
-import { createUser, getUserByEmail } from "@/app/(auth)/queries";
-import { signIn } from "../../../../auth";
+import { signIn } from "next-auth/react";
 
 const authFormSchema = z.object({
   email: z.string().email(),
@@ -24,19 +23,20 @@ export const register = async (
   formData: FormData
 ): Promise<RegisterActionState> => {
   try {
+    console.log(formData.get("email"));
     const validatedData = authFormSchema.parse({
       email: formData.get("email"),
     });
 
-    const user = await getUserByEmail(validatedData.email);
+    // const user = await getUserByEmail(validatedData.email);
 
-    if (user) {
-      return { status: "user_exists" } as RegisterActionState;
-    }
-    await createUser({
-      email: validatedData.email,
-    });
-    await signIn("credentials", {
+    // if (user) {
+    //   return { status: "user_exists" } as RegisterActionState;
+    // }
+    // await createUser({
+    //   email: validatedData.email,
+    // });
+    await signIn("resend", {
       email: validatedData.email,
       redirect: false,
     });
@@ -46,6 +46,7 @@ export const register = async (
     if (error instanceof z.ZodError) {
       return { status: "invalid_data" };
     }
+    console.log(error);
 
     return { status: "failed" };
   }

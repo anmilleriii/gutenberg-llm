@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,7 +15,6 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
-import { signIn } from "../../../../auth";
 import { register, RegisterActionState } from "./register-actions";
 
 export function RegisterForm({
@@ -24,7 +24,7 @@ export function RegisterForm({
   const router = useRouter();
 
   const [email, setEmail] = useState("");
-  const [isSuccessful, setIsSuccessful] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const [state, formAction] = useActionState<RegisterActionState, FormData>(
     register,
@@ -42,7 +42,7 @@ export function RegisterForm({
       toast.error("Failed validating your submission!");
     } else if (state.status === "success") {
       toast.success("Account created successfully");
-      setIsSuccessful(true);
+      setEmailSent(true);
       router.refresh();
     }
   }, [state, router]);
@@ -51,8 +51,6 @@ export function RegisterForm({
     setEmail(formData.get("email") as string);
     formAction(formData);
   };
-
-  const handleClickGoogle = (formData: FormData) => {};
 
   return (
     <form
@@ -66,30 +64,46 @@ export function RegisterForm({
           Enter your email below to create your account
         </p>
       </div>
-      <div className="grid gap-6">
-        <div className="grid gap-2">
-          <Label htmlFor="email" autoFocus>
-            Email
-          </Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+      {emailSent ? (
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="text-2xl font-bold">Check your email</h1>
+          <p className="text-balance text-sm text-muted-foreground">
+            We have sent a magic link to {email}
+          </p>
         </div>
-        <Button type="submit" className="w-full">
-          Register
-        </Button>
-        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-          <span className="relative z-10 bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
+      ) : (
+        <div className="grid gap-6">
+          <div className="grid gap-2">
+            <Label htmlFor="email" autoFocus>
+              Email
+            </Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="m@example.com"
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full">
+            Register
+          </Button>
+          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+            <span className="relative z-10 bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+          <Button
+            type="button"
+            onClick={() => signIn("google")}
+            variant="outline"
+            className="w-full"
+          >
+            <Image src="/google.svg" alt="logo" width={18} height={18} />
+            Register with Google
+          </Button>
         </div>
-        <Button
-          onSubmit={() => signIn("google")}
-          variant="outline"
-          className="w-full"
-        >
-          <Image src="/google.svg" alt="logo" width={18} height={18} />
-          Register with Google
-        </Button>
-      </div>
+      )}
       <div className="text-center text-sm">
         Have an account already?{" "}
         <Link href="/login" className="underline underline-offset-4">

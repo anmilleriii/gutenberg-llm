@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -65,7 +66,12 @@ export function LoginForm({
             Or continue with
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button
+          onClick={() => signIn("google")}
+          type="button"
+          variant="outline"
+          className="w-full"
+        >
           <Image src="/google.svg" alt="logo" width={18} height={18} />
           Login with Google
         </Button>
