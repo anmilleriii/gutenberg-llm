@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ComponentPropsWithoutRef } from "react";
 
-export function LoginForm({
+export function RegisterForm({
   className,
   ...props
 }: ComponentPropsWithoutRef<"form">) {
