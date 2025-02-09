@@ -1,3 +1,5 @@
+import { GutenbergBookContentResponse } from "./types";
+
 const GUTENBERG_BASE_URL = "https://www.gutenberg.org";
 
 export async function getBookContentById(bookId: string) {
@@ -5,7 +7,8 @@ export async function getBookContentById(bookId: string) {
     const response = await fetch(
       `${GUTENBERG_BASE_URL}/files/${bookId}/${bookId}-0.txt`
     );
-    return response;
+    const data = (await response.json()) as GutenbergBookContentResponse;
+    return data;
   } catch (error) {
     console.error(error);
   }
