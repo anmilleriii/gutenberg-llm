@@ -1,4 +1,6 @@
 "use client";
+
+import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -7,15 +9,22 @@ import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ComponentPropsWithoutRef, useActionState, useEffect } from "react";
-import { toast } from "sonner";
+import {
+  ComponentPropsWithoutRef,
+  useActionState,
+  useEffect,
+  useState,
+} from "react";
 import { login, LoginActionState } from "./login-actions";
 
 export function LoginForm({
   className,
   ...props
 }: ComponentPropsWithoutRef<"form">) {
+  const { toast } = useToast();
   const router = useRouter();
+  const [email, setEmail] = useState(null);
+  const [emailSent, setEmailSent] = useState(false);
 
   const [state, formAction] = useActionState<LoginActionState, FormData>(
     login,
@@ -25,18 +34,42 @@ export function LoginForm({
   );
 
   useEffect(() => {
+    const handleLoginSuccess = async () => {
+      // toast.success("Account created successfully");
+      setEmailSent(true);
+      await signIn("resend", {
+        email,
+        redirect: false,
+      });
+    };
     if (state.status === "failed") {
-      toast.error("Invalid credentials!");
     } else if (state.status === "invalid_data") {
-      toast.error("Failed validating your submission!");
+      toast({ title: "Invalid credentials!", variant: "destructive" });
     } else if (state.status === "success") {
+      handleLoginSuccess();
       router.refresh();
     }
-  }, [state.status, router]);
+  }, [state.status, router, email, toast]);
+
+  const handleSubmit = (formData: FormData) => {
+    setEmail(formData.get("email") as string);
+    formAction(formData);
+  };
+
+  if (emailSent) {
+    return (
+      <div className="flex flex-col items-center gap-2 text-center">
+        <h1 className="text-2xl font-bold">Check your email</h1>
+        <p className="text-balance text-sm text-muted-foreground pb-72">
+          Please follow the link sent to {email} to login
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form
-      action={formAction}
+      action={handleSubmit}
       className={cn("flex flex-col gap-6", className)}
       {...props}
     >

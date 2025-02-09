@@ -4,7 +4,6 @@ import { LibraryBig, LucideIcon, Search } from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavUser } from "@/components/nav-user";
 
 import {
   Sidebar,
@@ -12,6 +11,8 @@ import {
   SidebarFooter,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { SessionProvider } from "next-auth/react";
+import { AppNavUser } from "./app-nav-user";
 
 export interface SidebarItem {
   title: string;
@@ -60,18 +61,6 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // const router = useRouter();
-
-  // const session = useSession();
-  // if (session!) {
-  //   router.push("/login");
-  // }
-  // const user = {
-  //   email: session.data?.user?.email,
-  //   avatar: session.data?.user?.image,
-  //   name: session.data?.user?.name,
-  // };
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
@@ -79,7 +68,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <SessionProvider>
+          <AppNavUser />
+        </SessionProvider>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

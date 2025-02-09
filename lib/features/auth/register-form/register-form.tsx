@@ -23,7 +23,7 @@ export function RegisterForm({
 }: ComponentPropsWithoutRef<"form">) {
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(null);
   const [emailSent, setEmailSent] = useState(false);
 
   const [state, formAction] = useActionState<RegisterActionState, FormData>(
