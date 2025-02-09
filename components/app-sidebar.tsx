@@ -60,6 +60,18 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  // const router = useRouter();
+
+  // const session = useSession();
+  // if (session!) {
+  //   router.push("/login");
+  // }
+  // const user = {
+  //   email: session.data?.user?.email,
+  //   avatar: session.data?.user?.image,
+  //   name: session.data?.user?.name,
+  // };
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>

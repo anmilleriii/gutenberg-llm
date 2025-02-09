@@ -1,6 +1,5 @@
 "use server";
 
-import { signIn } from "@/auth";
 import { z } from "zod";
 
 const authFormSchema = z.object({
@@ -20,10 +19,10 @@ export const login = async (
       email: formData.get("email"),
     });
 
-    await signIn("credentials", {
-      email: validatedData.email,
-      redirect: false,
-    });
+    // await signIn("credentials", {
+    //   email: validatedData.email,
+    //   redirect: false,
+    // });
 
     return { status: "success" };
   } catch (error) {
