@@ -18,6 +18,7 @@ export async function getUserByEmail(email: string) {
 
 export async function getOrCreateAccountGoogle(email: string) {
   const existingAccount = await prisma.account.findUnique({
+    // @ts-expect-error -asdf
     where: { user: { email } },
     include: { user: true },
   });
@@ -25,14 +26,4 @@ export async function getOrCreateAccountGoogle(email: string) {
   if (existingAccount) {
     return existingAccount;
   }
-
-  const newAccount = prisma.account.create({
-    data: {
-      user: {
-        create: {
-          email,
-        },
-      },
-    },
-  });
 }

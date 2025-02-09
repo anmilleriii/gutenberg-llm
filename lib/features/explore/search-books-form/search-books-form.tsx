@@ -14,12 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  getBookContentById,
-  getBookMetadataById,
-} from "../client/gutenberg-client";
 
 const schema = z.object({
   bookId: z.string().length(10, {
@@ -33,19 +28,8 @@ export function SearchBooksForm() {
     resolver: zodResolver(schema),
   });
 
-  const [content, setContent] = useState<string | undefined | null>(null);
-
-  const onSubmit = async ({ bookId }: Schema) => {
-    try {
-      // not waterfall
-      const bookContent = await getBookContentById(bookId);
-      const bookMetadata = await getBookMetadataById(bookId);
-
-      // display the book
-      setContent(bookContent?.content);
-    } catch (error) {
-      console.error(error);
-    }
+  const onSubmit = async (data: Schema) => {
+    console.log(data);
   };
 
   return (
