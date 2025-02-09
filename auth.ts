@@ -18,3 +18,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
 });
+
+// const neon = new Pool({
+//   connectionString: process.env.AUTH_POSTGRES_PRISMA_URL,
+// })
+// const adapter = new PrismaNeon(neon)
+// const prisma = new PrismaClient({ adapter })

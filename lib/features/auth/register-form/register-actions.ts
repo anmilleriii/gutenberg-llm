@@ -2,8 +2,6 @@
 
 import { z } from "zod";
 
-import { signIn } from "next-auth/react";
-
 const authFormSchema = z.object({
   email: z.string().email(),
 });
@@ -36,10 +34,9 @@ export const register = async (
     // await createUser({
     //   email: validatedData.email,
     // });
-    await signIn("resend", {
-      email: validatedData.email,
-      redirect: false,
-    });
+
+    // 1 create the user
+    // 2 signin with nextauth
 
     return { status: "success" };
   } catch (error) {

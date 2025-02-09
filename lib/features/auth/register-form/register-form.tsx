@@ -34,6 +34,15 @@ export function RegisterForm({
   );
 
   useEffect(() => {
+    const handleRegisterSuccess = async () => {
+      toast.success("Account created successfully");
+      setEmailSent(true);
+      await signIn("resend", {
+        email,
+        redirect: false,
+      });
+    };
+
     if (state.status === "user_exists") {
       toast.error("Account already exists");
     } else if (state.status === "failed") {
@@ -41,16 +50,27 @@ export function RegisterForm({
     } else if (state.status === "invalid_data") {
       toast.error("Failed validating your submission!");
     } else if (state.status === "success") {
-      toast.success("Account created successfully");
-      setEmailSent(true);
+      handleRegisterSuccess();
+
       router.refresh();
     }
-  }, [state, router]);
+  }, [state, router, email]);
 
   const handleSubmit = (formData: FormData) => {
     setEmail(formData.get("email") as string);
     formAction(formData);
   };
+
+  if (emailSent) {
+    return (
+      <div className="flex flex-col items-center gap-2 text-center">
+        <h1 className="text-2xl font-bold">Check your email</h1>
+        <p className="text-balance text-sm text-muted-foreground pb-72">
+          Please follow the link sent to {email} to login
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -64,46 +84,37 @@ export function RegisterForm({
           Enter your email below to create your account
         </p>
       </div>
-      {emailSent ? (
-        <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Check your email</h1>
-          <p className="text-balance text-sm text-muted-foreground">
-            We have sent a magic link to {email}
-          </p>
+      <div className="grid gap-6">
+        <div className="grid gap-2">
+          <Label htmlFor="email" autoFocus>
+            Email
+          </Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="gutenberg@example.com"
+            required
+          />
         </div>
-      ) : (
-        <div className="grid gap-6">
-          <div className="grid gap-2">
-            <Label htmlFor="email" autoFocus>
-              Email
-            </Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-            />
-          </div>
-          <Button type="submit" className="w-full">
-            Register
-          </Button>
-          <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-            <span className="relative z-10 bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
-          <Button
-            type="button"
-            onClick={() => signIn("google")}
-            variant="outline"
-            className="w-full"
-          >
-            <Image src="/google.svg" alt="logo" width={18} height={18} />
-            Register with Google
-          </Button>
+        <Button type="submit" className="w-full">
+          Register
+        </Button>
+        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+          <span className="relative z-10 bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
         </div>
-      )}
+        <Button
+          type="button"
+          onClick={() => signIn("google")}
+          variant="outline"
+          className="w-full"
+        >
+          <Image src="/google.svg" alt="logo" width={18} height={18} />
+          Register with Google
+        </Button>
+      </div>
       <div className="text-center text-sm">
         Have an account already?{" "}
         <Link href="/login" className="underline underline-offset-4">
