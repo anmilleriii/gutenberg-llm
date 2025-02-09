@@ -25,10 +25,11 @@ export default function AuthLayout({ children }: PropsWithChildren) {
         </>
       </div>
       <div className="relative hidden bg-muted lg:block">
-        <img
+        <Image
           src="/gutenberg.webp"
-          alt="Image"
+          alt="logo"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          fill
         />
       </div>
     </div>
