@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -34,13 +33,9 @@ export function LoginForm({
     }
   }, [state.status, router]);
 
-  const handleSubmit = (formData: FormData) => {
-    formAction(formData);
-  };
-
   return (
     <form
-      action={handleSubmit}
+      action={formAction}
       className={cn("flex flex-col gap-6", className)}
       {...props}
     >
@@ -56,8 +51,10 @@ export function LoginForm({
           <Input
             autoFocus
             id="email"
+            name="email"
             type="email"
-            placeholder="m@example.com"
+            placeholder="gutenberg@example.com"
+            required
           />
         </div>
         <Button type="submit" className="w-full">

@@ -8,10 +8,6 @@ export default defineConfig({
     globals: true,
     environment: "happy-dom",
     setupFiles: ["./vitest.setup.ts"],
-
-    // alias: {
-    //   "@/": new URL("./", import.meta.url).pathname,
-    // },
     include: ["app/**/*.test.{ts,tsx}", "lib/**/*.test.{ts,tsx}"],
   },
 });

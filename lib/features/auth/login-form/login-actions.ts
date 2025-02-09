@@ -20,7 +20,10 @@ export const login = async (
       email: formData.get("email"),
     });
 
-    await signIn("resend", validatedData, { redirect: false });
+    await signIn("credentials", {
+      email: validatedData.email,
+      redirect: false,
+    });
 
     return { status: "success" };
   } catch (error) {

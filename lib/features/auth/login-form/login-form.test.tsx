@@ -6,7 +6,11 @@ describe("<LoginForm />", () => {
   describe("login with email", () => {
     it("allows the user to login with valid credentials", async () => {
       render(<LoginForm />);
-      await userEvent.type(screen.getByLabelText("Email"), "test@gmail.com");
+      await userEvent.type(
+        screen.getByPlaceholderText("gutenberg@example.com"),
+        "test@gmail.com"
+      );
+      await userEvent.click(screen.getByRole("button", { name: "Login" }));
 
       expect(await screen.findByText(/success/i)).toBeVisible();
     });
