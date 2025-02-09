@@ -2,20 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import {
-  ComponentPropsWithoutRef,
-  useActionState,
-  useEffect,
-  useState,
-} from "react";
-import { toast } from "sonner";
-
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-
 import { Label } from "@radix-ui/react-label";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ComponentPropsWithoutRef, useActionState, useEffect } from "react";
+import { toast } from "sonner";
 import { login, LoginActionState } from "./login-actions";
 
 export function LoginForm({
@@ -23,9 +16,6 @@ export function LoginForm({
   ...props
 }: ComponentPropsWithoutRef<"form">) {
   const router = useRouter();
-
-  const [email, setEmail] = useState("");
-  const [isSuccessful, setIsSuccessful] = useState(false);
 
   const [state, formAction] = useActionState<LoginActionState, FormData>(
     login,
@@ -40,13 +30,11 @@ export function LoginForm({
     } else if (state.status === "invalid_data") {
       toast.error("Failed validating your submission!");
     } else if (state.status === "success") {
-      setIsSuccessful(true);
       router.refresh();
     }
   }, [state.status, router]);
 
   const handleSubmit = (formData: FormData) => {
-    setEmail(formData.get("email") as string);
     formAction(formData);
   };
 

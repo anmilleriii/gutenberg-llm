@@ -14,6 +14,7 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
+import { signIn } from "../../../../auth";
 import { register, RegisterActionState } from "./register-actions";
 
 export function RegisterForm({
@@ -51,6 +52,8 @@ export function RegisterForm({
     formAction(formData);
   };
 
+  const handleClickGoogle = (formData: FormData) => {};
+
   return (
     <form
       action={handleSubmit}
@@ -78,7 +81,11 @@ export function RegisterForm({
             Or continue with
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button
+          onSubmit={() => signIn("google")}
+          variant="outline"
+          className="w-full"
+        >
           <Image src="/google.svg" alt="logo" width={18} height={18} />
           Register with Google
         </Button>

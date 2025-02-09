@@ -1,7 +1,7 @@
 "use server";
 
+import { signIn } from "@/auth";
 import { z } from "zod";
-import { signIn } from "../auth";
 
 const authFormSchema = z.object({
   email: z.string().email(),
@@ -20,10 +20,7 @@ export const login = async (
       email: formData.get("email"),
     });
 
-    await signIn("credentials", {
-      email: validatedData.email,
-      redirect: false,
-    });
+    await signIn("resend", validatedData, { redirect: false });
 
     return { status: "success" };
   } catch (error) {
