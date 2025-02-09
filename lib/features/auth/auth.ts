@@ -1,10 +1,6 @@
-import { compare } from "bcrypt-ts";
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
-
-import { getUserByEmail } from "../../../app/(auth)/queries";
 
 export const {
   handlers: { GET, POST },
@@ -13,20 +9,6 @@ export const {
   signOut,
 } = NextAuth({
   providers: [
-    CredentialsProvider({
-      credentials: {},
-      async authorize({ email, password }) {
-        const user = await getUserByEmail(email);
-
-        const passwordsMatch = await compare(password, user.passwordHash!);
-
-        if (!passwordsMatch) {
-          return null;
-        }
-
-        return user;
-      },
-    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,

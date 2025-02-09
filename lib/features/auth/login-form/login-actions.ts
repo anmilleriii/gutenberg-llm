@@ -5,7 +5,6 @@ import { signIn } from "../auth";
 
 const authFormSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
 });
 
 export interface LoginActionState {
@@ -19,12 +18,10 @@ export const login = async (
   try {
     const validatedData = authFormSchema.parse({
       email: formData.get("email"),
-      password: formData.get("password"),
     });
 
     await signIn("credentials", {
       email: validatedData.email,
-      password: validatedData.password,
       redirect: false,
     });
 

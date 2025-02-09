@@ -70,19 +70,6 @@ export function RegisterForm({
           </Label>
           <Input id="email" type="email" placeholder="m@example.com" required />
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="m@example.com"
-            required
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
-          <Input id="confirmPassword" required />
-        </div>
         <Button type="submit" className="w-full">
           Register
         </Button>
