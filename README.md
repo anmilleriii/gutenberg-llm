@@ -1,7 +1,5 @@
 # Gutenberg
 
-<!--  -->
-
 ## Demo
 
 [] Demo video
