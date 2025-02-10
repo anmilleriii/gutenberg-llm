@@ -31,3 +31,7 @@ Code generation is used from shadcdn CLI.
 
 - Search gutenberg books by text in DB
 - Store gutenberg books in DB
+- embeddings w/prisma
+- get book text api
+- email
+-

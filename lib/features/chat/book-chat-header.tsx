@@ -30,7 +30,7 @@ export async function BookChatHeader({
             {title}
           </h1>
           <h2 className="scroll-m-20  pb-2 text-xl tracking-tight first:mt-0">
-            {authors?.[0].name}
+            {authors?.[0]?.name}
           </h2>
           <div className="[&>p]:text-xs text-muted-foreground">
             <p>Gutenberg Book ID: {id}</p>
@@ -41,7 +41,7 @@ export async function BookChatHeader({
         </div>
       </div>
       <div className="flex pl-12 p-8">
-        <p className="leading-6  text-sm flex-[2]">{summaries[0]}</p>
+        <p className="leading-6  text-sm flex-[2]">{summaries?.[0]}</p>
       </div>
     </div>
   );

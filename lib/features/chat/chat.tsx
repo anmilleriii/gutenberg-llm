@@ -6,8 +6,13 @@ import { GutendexBookMetadata } from "@/lib/client/types";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
 
-export function Chat({ title }: GutendexBookMetadata) {
+export function Chat({
+  title,
+  content,
+}: GutendexBookMetadata & { content: string }) {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
+
+  // TODO rag content
 
   const user = "Albert";
 
@@ -33,7 +38,15 @@ export function Chat({ title }: GutendexBookMetadata) {
           )}
         >
           {m.role === "user" ? `${user}: ` : "Gutenberg LLM: "}
-          <p>{m.content}</p>
+          <p>
+            {m.content.length > 0 ? (
+              m.content
+            ) : (
+              <span className="italic font-light">
+                {"calling tool: " + m?.parts?.[0].toolName}
+              </span>
+            )}
+          </p>
         </div>
       ))}
     </div>
