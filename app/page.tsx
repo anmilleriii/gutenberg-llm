@@ -1,3 +1,12 @@
-export default function Page() {
-  return <div>home</div>;
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+
+export default async function Page() {
+  const session = await auth();
+
+  if (session) {
+    redirect("/explore");
+  } else {
+    redirect("/login");
+  }
 }
