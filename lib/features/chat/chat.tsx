@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GutendexBookMetadata } from "@/lib/client/types";
 import { cn } from "@/lib/utils";
@@ -44,3 +45,11 @@ export function Chat({ title }: GutendexBookMetadata) {
 
 //   )
 // }
+
+function Suggestions() {
+  return (
+    <div className="flex flex-wrap">
+      <Badge>What</Badge>
+    </div>
+  );
+}

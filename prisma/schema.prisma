@@ -69,14 +69,25 @@ model VerificationToken {
 // }
 
 model SavedBook {
-  id              String @id @default(cuid())
-  gutenbergBookId String @unique
+  id                     String  @id @default(cuid())
+  gutenbergBookId        String  @unique
+  gutenbergBookImageHref String?
 
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
+
+// model Resource {
+//   id              String @id @default(cuid())
+//   gutenbergBookId String @unique
+
+//   userId String @map("user_id")
+//   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   createdAt DateTime @default(now())
+// }
 
 // model SavedChat {
 //   id              String @id @default(cuid())

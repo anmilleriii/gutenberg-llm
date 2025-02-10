@@ -25,7 +25,7 @@ export async function BookChatHeader({
           alt={title}
         />
         <div className="flex flex-col w-full">
-          <SaveBookButton bookId={String(id)} />
+          <SaveBookButton bookId={String(id)} image={image} />
           <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl">
             {title}
           </h1>

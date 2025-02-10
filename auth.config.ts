@@ -14,8 +14,24 @@ export default {
     }),
   ],
   callbacks: {
+    // TODO middleware
     authorized: async ({ auth }) => {
       return !!auth;
     },
+    // jwt: async ({ token, user, account }) => {
+    //   if (user) {
+    //     token.id = user.id;
+    //   }
+    //   console.log({ user, token, account });
+    //   return token;
+    // },
+    session: ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: token.sub,
+      },
+    }),
   },
+  debug: false,
 } satisfies NextAuthConfig;
