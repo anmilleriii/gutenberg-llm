@@ -1,12 +1,24 @@
-export interface GutenbergBookContentMetadata {
+export interface GutendexBookMetadata {
+  id: number;
   title: string;
-  content: string;
-  [key: string]: string;
-}
-
-export interface GutenbergBookContentResponse {
-  id: string;
-  title: string;
-  content: string;
-  metadata: GutenbergBookContentMetadata;
+  authors: {
+    name: string;
+    birth_year: number;
+    death_year: number;
+  }[];
+  summaries: string[];
+  translators: {
+    name: string;
+    birth_year: number;
+    death_year: number;
+  }[];
+  subjects: string[];
+  bookshelves: string[];
+  languages: string[];
+  copyright: boolean;
+  media_type: string;
+  formats: {
+    [key: string]: string;
+  };
+  download_count: number;
 }

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { ComponentPropsWithoutRef, useActionState, useEffect } from "react";
 
 import { RegisterActionState } from "../../auth/register-form/register-actions";
+import { SearchBooksResultsList } from "../search-books-results-list/search-books-results-list";
 import { queryBooksById } from "./actions";
 
 export function SearchBooksForm({
@@ -26,6 +27,10 @@ export function SearchBooksForm({
 
   useEffect(() => {
     // todo
+    if (state.status === "success") {
+      console.log({ state });
+      // router.push(`/explore/${state}`);
+    }
   }, [state, router]);
 
   const handleSubmit = (formData: FormData) => {
@@ -34,7 +39,7 @@ export function SearchBooksForm({
 
   return (
     <>
-      <Card className="w-1/4 aspect-video">
+      <Card className="min-w-96 w-1/2 aspect-video">
         <CardHeader>
           <CardTitle>Search Gutenberg books by ID</CardTitle>
           {/* <CardDescription>Card Description</CardDescription> */}
@@ -57,13 +62,7 @@ export function SearchBooksForm({
           </form>
         </CardContent>
       </Card>
-      <Card className="w-1/4 aspect-video">
-        <CardHeader>
-          <CardTitle>Result</CardTitle>
-          {/* <CardDescription>Card Description</CardDescription> */}
-        </CardHeader>
-        <CardContent>{state.data}</CardContent>
-      </Card>
+      <SearchBooksResultsList results={state.data ? [state.data] : []} />
     </>
   );
 }

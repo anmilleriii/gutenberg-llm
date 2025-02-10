@@ -1,6 +1,7 @@
 "use server";
 
 import { getBookMetadataById } from "@/lib/client/gutenberg-client";
+import { GutendexBookMetadata } from "@/lib/client/types";
 import { z } from "zod";
 
 const authFormSchema = z.object({
@@ -15,6 +16,7 @@ export interface QueryBooksActionState {
     | "failed"
     | "user_exists"
     | "invalid_data";
+  data?: GutendexBookMetadata;
 }
 
 export const queryBooksById = async (
@@ -22,21 +24,18 @@ export const queryBooksById = async (
   formData: FormData
 ): Promise<QueryBooksActionState> => {
   try {
-    console.log(formData.get("id"));
     const validatedData = authFormSchema.parse({
       id: formData.get("id"),
     });
 
-    const result = await getBookMetadataById(validatedData.id);
-    const d = await result?.text();
-    console.log({ d });
+    const data = await getBookMetadataById(Number(validatedData.id));
 
-    return { status: "success", data: d };
+    return { status: "success", data };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return { status: "invalid_data" };
     }
-    console.log(error);
+    console.error(error);
 
     return { status: "failed" };
   }

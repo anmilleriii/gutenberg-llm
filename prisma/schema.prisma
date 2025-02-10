@@ -59,3 +59,23 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verification_tokens")
 }
+
+// // we store the index as a fast index of all books? alternatively gutendex
+// model GutenbergBookMetadata {
+//   id              String @id @default(cuid())
+//   gutenbergBookId String @unique
+// }
+
+model SavedBook {
+  id              String @id @default(cuid())
+  gutenbergBookId String @unique
+
+  createdAt DateTime @default(now())
+}
+
+// model SavedChat {
+//   id              String @id @default(cuid())
+//   gutenbergBookId String @unique
+
+//   createdAt DateTime @default(now())
+// }

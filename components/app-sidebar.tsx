@@ -43,6 +43,10 @@ const data = {
           title: "Explore",
           url: "/explore",
         },
+        {
+          title: "Chat",
+          url: "/chat",
+        },
       ],
     },
     {
