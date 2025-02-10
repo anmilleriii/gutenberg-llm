@@ -28,7 +28,6 @@ export function SearchBooksForm({
   useEffect(() => {
     // todo
     if (state.status === "success") {
-      console.log({ state });
       // router.push(`/explore/${state}`);
     }
   }, [state, router]);

@@ -21,7 +21,6 @@ export const register = async (
   formData: FormData
 ): Promise<RegisterActionState> => {
   try {
-    console.log(formData.get("email"));
     const validatedData = authFormSchema.parse({
       email: formData.get("email"),
     });
@@ -43,7 +42,7 @@ export const register = async (
     if (error instanceof z.ZodError) {
       return { status: "invalid_data" };
     }
-    console.log(error);
+    console.error(error);
 
     return { status: "failed" };
   }

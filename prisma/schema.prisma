@@ -45,8 +45,10 @@ model User {
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
-  accounts      Account[]
-  sessions      Session[]
+
+  savedBooks SavedBook[]
+  accounts   Account[]
+  sessions   Session[]
 
   @@map("users")
 }
@@ -69,6 +71,9 @@ model VerificationToken {
 model SavedBook {
   id              String @id @default(cuid())
   gutenbergBookId String @unique
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }

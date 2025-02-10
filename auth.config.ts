@@ -15,7 +15,6 @@ export default {
   ],
   callbacks: {
     authorized: async ({ auth }) => {
-      console.log(!!auth);
       return !!auth;
     },
   },
