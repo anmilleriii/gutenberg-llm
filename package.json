@@ -10,10 +10,12 @@
     "lint": "next lint",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^1.1.7",
     "@auth/prisma-adapter": "^2.7.4",
     "@hookform/resolvers": "^3.10.0",
     "@neondatabase/serverless": "^0.10.4",
@@ -46,6 +48,7 @@
     "@radix-ui/react-toggle": "^1.1.2",
     "@radix-ui/react-toggle-group": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
+    "ai": "^4.1.28",
     "bcrypt-ts": "^5.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

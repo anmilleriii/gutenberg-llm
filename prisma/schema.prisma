@@ -1,12 +1,13 @@
-generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DATABASE_URL_UNPOOLED")
+  extensions = [vector]
 }
 
-datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL_UNPOOLED")
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters", "postgresqlExtensions"]
 }
 
 model Account {
@@ -26,7 +27,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@map("accounts")
+  @@map("account")
 }
 
 model Session {
@@ -36,7 +37,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("sessions")
+  @@map("session")
 }
 
 model User {
@@ -45,10 +46,12 @@ model User {
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
-  accounts      Account[]
-  sessions      Session[]
 
-  @@map("users")
+  savedBooks SavedBook[]
+  accounts   Account[]
+  sessions   Session[]
+
+  @@map("user")
 }
 
 model VerificationToken {
@@ -57,5 +60,47 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-  @@map("verification_tokens")
+  @@map("verification_token")
+}
+
+model SavedBook {
+  id                     String  @id @default(cuid())
+  gutenbergBookId        String  @unique
+  gutenbergBookImageHref String?
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("saved_book")
+}
+
+model Embedding {
+  id     String                       @id @default(cuid())
+  vector Unsupported("vector(1536)")?
+
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([vector], map: "vector_hnsw")
+  @@map("embedding")
+}
+
+model Resource {
+  id              String @id @default(cuid())
+  gutenbergBookId String
+
+  content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  Embedding Embedding[]
+
+  @@map("resource")
 }

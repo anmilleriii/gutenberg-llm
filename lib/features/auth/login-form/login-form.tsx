@@ -1,59 +1,37 @@
 "use client";
 
-import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/tailwind";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  ComponentPropsWithoutRef,
-  useActionState,
-  useEffect,
-  useState,
-} from "react";
-import { login, LoginActionState } from "./login-actions";
+import { ComponentPropsWithoutRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-export function LoginForm({
-  className,
-  ...props
-}: ComponentPropsWithoutRef<"form">) {
-  const { toast } = useToast();
+const schema = z.object({
+  email: z.string().email(),
+});
+
+type Schema = z.infer<typeof schema>;
+
+export function LoginForm({ className }: ComponentPropsWithoutRef<"form">) {
   const router = useRouter();
-  const [email, setEmail] = useState(null);
+  const methods = useForm<Schema>({ resolver: zodResolver(schema) });
+
   const [emailSent, setEmailSent] = useState(false);
 
-  const [state, formAction] = useActionState<LoginActionState, FormData>(
-    login,
-    {
-      status: "idle",
-    }
-  );
-
-  useEffect(() => {
-    const handleLoginSuccess = async () => {
-      // toast.success("Account created successfully");
-      setEmailSent(true);
-      await signIn("resend", {
-        email,
-        redirect: false,
-      });
-    };
-    if (state.status === "failed") {
-    } else if (state.status === "invalid_data") {
-      toast({ title: "Invalid credentials!", variant: "destructive" });
-    } else if (state.status === "success") {
-      handleLoginSuccess();
-      router.refresh();
-    }
-  }, [state.status, router, email, toast]);
-
-  const handleSubmit = (formData: FormData) => {
-    setEmail(formData.get("email") as string);
-    formAction(formData);
+  const handleSubmit = async ({ email }: Schema) => {
+    setEmailSent(true);
+    await signIn("resend", {
+      email,
+      redirect: false,
+    });
+    router.refresh();
   };
 
   if (emailSent) {
@@ -61,7 +39,7 @@ export function LoginForm({
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Check your email</h1>
         <p className="text-balance text-sm text-muted-foreground pb-72">
-          Please follow the link sent to {email} to login
+          Please follow the link sent to {methods.getValues("email")} to login
         </p>
       </div>
     );
@@ -69,9 +47,8 @@ export function LoginForm({
 
   return (
     <form
-      action={handleSubmit}
+      onSubmit={methods.handleSubmit(handleSubmit)}
       className={cn("flex flex-col gap-6", className)}
-      {...props}
     >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Welcome to Gutenberg LLM</h1>
@@ -85,10 +62,9 @@ export function LoginForm({
           <Input
             autoFocus
             id="email"
-            name="email"
             type="email"
             placeholder="gutenberg@example.com"
-            required
+            {...methods.register("email")}
           />
         </div>
         <Button type="submit" className="w-full">

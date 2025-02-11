@@ -1,58 +1,62 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { SearchIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Label } from "@/components/ui/label";
 
-const schema = z.object({
-  bookId: z.string().length(10, {
-    message: "Gutenberg book ID's are 10 characters long.",
-  }),
-});
-type Schema = z.infer<typeof schema>;
+import { useRouter } from "next/navigation";
+import { ComponentPropsWithoutRef, useActionState, useEffect } from "react";
 
-export function SearchBooksForm() {
-  const methods = useForm<Schema>({
-    resolver: zodResolver(schema),
+import { cn } from "@/lib/utils/tailwind";
+import { SearchBooksResultsList } from "../search-books-results-list/search-books-results-list";
+import { queryBooksById } from "./actions";
+
+export function SearchBooksForm({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"form">) {
+  const router = useRouter();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [state, formAction] = useActionState<any, FormData>(queryBooksById, {
+    status: "idle",
   });
 
-  const onSubmit = async (data: Schema) => {
-    console.log(data);
+  useEffect(() => {
+    if (state.status === "success") {
+    }
+  }, [state, router]);
+
+  const handleSubmit = (formData: FormData) => {
+    formAction(formData);
   };
 
   return (
-    <Form {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={methods.control}
-          name="bookId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Gutenberg Book ID</FormLabel>
-              <FormControl>
-                <Input autoFocus placeholder="1234567" {...field} />
-              </FormControl>
-              {/* <FormDescription>Search by Gutenberg Book ID</FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">
-          <SearchIcon /> Search
-        </Button>
-      </form>
-    </Form>
+    <>
+      <Card className="min-w-96 w-1/2 aspect-video">
+        <CardHeader>
+          <CardTitle>Search Gutenberg books by ID</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form
+            action={handleSubmit}
+            className={cn("flex flex-col gap-6", className)}
+            {...props}
+          >
+            <Label>Gutenberg Book ID</Label>
+            <Input
+              name="id"
+              type="text"
+              id="id"
+              autoFocus
+              placeholder="1234567"
+            />
+            <Button type="submit">Search</Button>
+          </form>
+        </CardContent>
+      </Card>
+      <SearchBooksResultsList results={state.data ? [state.data] : []} />
+    </>
   );
 }

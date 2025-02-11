@@ -1,3 +1,43 @@
-export function SearchBooksResultsList() {
-  return <div>SearchBooksResultsList</div>;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { SavedBook } from "@prisma/client";
+import Link from "next/link";
+
+export function SearchBooksResultsList({ results }: { results: SavedBook[] }) {
+  if (!results) {
+    return null;
+  }
+
+  if (results.length === 0) {
+    return (
+      <Card>
+        <CardHeader className="text-xl font-semibold">No results</CardHeader>
+      </Card>
+    );
+  }
+  return (
+    <Card>
+      <CardHeader className="text-xl font-semibold">Results</CardHeader>
+      <CardContent>
+        {results?.map((result) => (
+          <Link
+            className="hover:opacity-70 transition-[opacity]"
+            key={result.title}
+            href={`/explore/${result.id}`}
+          >
+            <Card>
+              <CardHeader className="text-lg font-semibold pb-2">
+                {result.title}
+              </CardHeader>
+              <CardContent>
+                <p>{result.authors?.[0].name}</p>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
+      </CardContent>
+    </Card>
+  );
 }

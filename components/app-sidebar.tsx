@@ -55,6 +55,10 @@ const data = {
           title: "Bookshelf",
           url: "/bookshelf",
         },
+        {
+          title: "History",
+          url: "/history",
+        },
       ],
     },
   ] as SidebarItem[],

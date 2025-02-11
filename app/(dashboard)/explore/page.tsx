@@ -1,17 +1,12 @@
 import { auth } from "@/auth";
+import { SearchBooksForm } from "@/lib/features/explore/search-books-form/search-books-form";
 import { redirect } from "next/navigation";
 
-export default async function Page() {
+export default async function ExplorePage() {
   const session = await auth();
-
   if (!session) {
     redirect("/login");
   }
-  console.log({ session });
 
-  return (
-    <main className="flex flex-col content-start  p-16">
-      <h1>Search Gutenberg books by ID</h1>
-    </main>
-  );
+  return <SearchBooksForm />;
 }
