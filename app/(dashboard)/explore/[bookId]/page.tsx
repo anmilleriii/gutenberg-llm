@@ -1,7 +1,8 @@
 import { getBookContentById } from "@/lib/adapters/gutenberg";
-import { BookChatHeader } from "@/lib/features/chat/book-chat-header";
 import { Chat } from "@/lib/features/chat/chat";
-import { getGutenbergBookMetadataById } from "@/lib/features/explore/search-books-form/queries";
+import { createResource } from "@/lib/features/chat/rag/actions/resources";
+import { BookChatHeader } from "@/lib/features/search/book-detail/book-chat-header";
+import { getGutenbergBookMetadataById } from "@/lib/features/search/search-books-form/queries";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
 import { notFound } from "next/navigation";
 
@@ -18,16 +19,19 @@ export default async function BookPage({
     getBookContentById(bookId),
   ]);
 
-  if (!metadata?.title) {
+  if (!metadata?.title || !content) {
     return notFound();
   }
 
+  await createResource({
+    content,
+    gutenbergBookId: bookId,
+  });
+
   return (
-    <div>
+    <div className="flex flex-col justify-between min-h-full">
       <BookChatHeader {...metadata} />
-      {/* @ts-expect-error asdf */}
-      <Chat {...metadata} />
-      {content}
+      <Chat title={metadata.title} />
     </div>
   );
 }

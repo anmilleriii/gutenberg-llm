@@ -3,7 +3,7 @@
 import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Book } from "lucide-react";
-import { saveBook } from "./save-chat-actions";
+import { saveBook } from "../chat/save-chat-actions";
 
 export function SaveBookButton({ bookId }: { bookId: string; image?: string }) {
   const { toast } = useToast();

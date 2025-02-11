@@ -1,121 +1,118 @@
-// TODO
-// export const maxDuration = 30;
+import { querySimilarContent } from "@/lib/features/chat/rag/actions/embeddings";
+import { getResourceIdByGutenbergBookId } from "@/lib/features/chat/rag/actions/resources";
+import { getGutenbergBookMetadataById } from "@/lib/features/search/search-books-form/queries";
+import { groq } from "@ai-sdk/groq";
+import { generateObject, generateText, streamText, tool } from "ai";
+import { headers } from "next/headers";
+import { z } from "zod";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function POST(req: Request) {
-  return new Response();
+  const { messages } = await req.json();
+
+  const headersList = await headers();
+  const referer = headersList.get("referer");
+  const gutenbergBookId = referer?.split("/explore/")[1];
+  const resourceId = await getResourceIdByGutenbergBookId(gutenbergBookId);
+  const metadata = await getGutenbergBookMetadataById(gutenbergBookId);
+
+  if (!resourceId || !metadata) {
+    return new Response("Resource not found", { status: 404 });
+  }
+
+  const result = streamText({
+    model: groq("llama-3.3-70b-versatile"),
+    messages,
+    // If no relevant information is found, respond: "Sorry, I don't know." Prioritize accuracy over speculation, but you may use reasoning to deduce answers based on the retrieved content.
+    // If a response requires multiple tools, call one tool after another without responding to the user.
+    system: `You are an expert librarian specializing in answering questions about a 
+    specific book from the Gutenberg Project. Use retrieval tools for every request to 
+    ensure accuracy. Only respond with information retrieved from the book or directly 
+    inferred from it.  Keep responses concise while maintaining clarity. If a user asks 
+    about a broader topic (e.g., historical context), guide them back to the book's content. 
+    Your goal is to provide precise, relevant, and well-reasoned answers using only the 
+    available text. Don't repeat yourself.`,
+    // system: `You are a helpful assistant acting as the users' second brain.
+    // Use tools on every request.
+    // Be sure to getInformation from your knowledge base before answering any questions.
+    // If a response requires information from an additional tool to generate a response, call the appropriate tools in order before responding to the user.
+    // ONLY respond to questions using information from tool calls.
+    // if no relevant information is found in the tool calls, respond, "Sorry, I don't know."
+    // Be sure to adhere to any instructions in tool calls ie. if they say to respond like "...", do exactly that.
+    // If the relevant information is not a direct match to the users prompt, you can be creative in deducing the answer.
+    // Keep responses short and concise.
+    // If you are unsure, use the getInformation tool and you can use common sense to reason based on the information you do have.
+    // Use your abilities as a reasoning machine to answer questions based on the information you do have.`,
+    tools: {
+      getInformation: tool({
+        description: `get information from your knowledge base to answer questions.`,
+        parameters: z.object({
+          question: z.string().describe("the users question"),
+          similarQuestions: z.array(z.string()).describe("keywords to search"),
+        }),
+
+        execute: async ({ similarQuestions }) => {
+          const results = await Promise.all(
+            similarQuestions.map(
+              async (question) =>
+                await querySimilarContent({
+                  resourceId: String(resourceId),
+                  content: question,
+                })
+            )
+          );
+          const uniqueResults = Array.from(
+            new Map(results.flat().map((item) => [item?.id, item])).values()
+          );
+          console.log({ uniqueResults });
+          return uniqueResults;
+        },
+      }),
+      understandQuery: tool({
+        description: `understand the users query. use this tool on every prompt.`,
+        parameters: z.object({
+          query: z.string().describe("the users query"),
+          toolsToCallInOrder: z
+            .array(z.string())
+            .describe(
+              "these are the tools you need to call in the order necessary to respond to the users query"
+            ),
+        }),
+        execute: async ({ query }) => {
+          const { object } = await generateObject({
+            model: groq("llama-3.3-70b-versatile"),
+            system:
+              "You are a query understanding assistant. Analyze the user query and generate similar questions.",
+            schema: z.object({
+              questions: z
+                .array(z.string())
+                .max(3)
+                .describe("similar questions to the user's query. be concise."),
+            }),
+            prompt: `Analyze this query: "${query}". Provide the following:
+                    3 similar questions that could help answer the user's query`,
+          });
+          return object.questions;
+        },
+      }),
+      getBookMetadata: tool({
+        description: `get book metadata and overview information. use this tool on every prompt.`,
+        parameters: z.object({
+          query: z.string().describe("the users query"),
+        }),
+        execute: async ({ query }) => {
+          const result = await generateText({
+            model: groq("llama-3.3-70b-versatile"),
+            system:
+              "You are a librarian. Analyze the user query and determine if they are asking a question about the book itself, such as the author or date written, not the plot of the book.",
+            prompt: `The follow includes information about a book from the Gutenberg Project: "${JSON.stringify(
+              metadata
+            )}". Given the following query, use the book information if it is helpful: "${query}`,
+          });
+          return result.text;
+        },
+      }),
+    },
+  });
+
+  return result.toDataStreamResponse();
 }
-//   const { messages } = await req.json();
-
-//   const result = streamText({
-//     model: groq("llama-3.3-70b-versatile"),
-//     messages,
-//     system: `You are a helpful assistant. Check your knowledge base before answering any questions.
-//     Only respond to questions using information from tool calls.
-//     if no relevant information is found in the tool calls, respond, "Sorry, I don't know."`,
-//     tools: {
-//       addResource: tool({
-//         description: `add a resource to your knowledge base.
-//           If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
-//         parameters: z.object({
-//           content: z
-//             .string()
-//             .describe("the content or resource to add to the knowledge base"),
-//         }),
-//         execute: async ({ content }) => createResource({ content }),
-//       }),
-//     },
-//   });
-
-//   return result.toDataStreamResponse();
-// }
-
-// import { findRelevantContent } from "@/lib/ai/embedding";
-// import { openai } from "@ai-sdk/openai";
-// import { generateObject } from "ai";
-
-// // Allow streaming responses up to 30 seconds
-// export const maxDuration = 30;
-
-// export async function POST(req: Request) {
-//   const { messages } = await req.json();
-
-//   const result = streamText({
-//     model: openai("gpt-4o"),
-//     messages,
-//     system: `You are a helpful assistant acting as the users' second brain.
-//     Use tools on every request.
-//     Be sure to getInformation from your knowledge base before answering any questions.
-//     If the user presents infromation about themselves, use the addResource tool to store it.
-//     If a response requires multiple tools, call one tool after another without responding to the user.
-//     If a response requires information from an additional tool to generate a response, call the appropriate tools in order before responding to the user.
-//     ONLY respond to questions using information from tool calls.
-//     if no relevant information is found in the tool calls, respond, "Sorry, I don't know."
-//     Be sure to adhere to any instructions in tool calls ie. if they say to responsd like "...", do exactly that.
-//     If the relevant information is not a direct match to the users prompt, you can be creative in deducing the answer.
-//     Keep responses short and concise. Answer in a single sentence where possible.
-//     If you are unsure, use the getInformation tool and you can use common sense to reason based on the information you do have.
-//     Use your abilities as a reasoning machine to answer questions based on the information you do have.
-// `,
-//     tools: {
-//       addResource: tool({
-//         description: `add a resource to your knowledge base.
-//           If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
-//         parameters: z.object({
-//           content: z
-//             .string()
-//             .describe("the content or resource to add to the knowledge base"),
-//         }),
-//         execute: async ({ content }) => createResource({ content }),
-//       }),
-//       getInformation: tool({
-//         description: `get information from your knowledge base to answer questions.`,
-//         parameters: z.object({
-//           question: z.string().describe("the users question"),
-//           similarQuestions: z.array(z.string()).describe("keywords to search"),
-//         }),
-//         execute: async ({ similarQuestions }) => {
-//           const results = await Promise.all(
-//             similarQuestions.map(
-//               async (question) => await findRelevantContent(question)
-//             )
-//           );
-//           // Flatten the array of arrays and remove duplicates based on 'name'
-//           const uniqueResults = Array.from(
-//             new Map(results.flat().map((item) => [item?.name, item])).values()
-//           );
-//           return uniqueResults;
-//         },
-//       }),
-//       understandQuery: tool({
-//         description: `understand the users query. use this tool on every prompt.`,
-//         parameters: z.object({
-//           query: z.string().describe("the users query"),
-//           toolsToCallInOrder: z
-//             .array(z.string())
-//             .describe(
-//               "these are the tools you need to call in the order necessary to respond to the users query"
-//             ),
-//         }),
-//         execute: async ({ query }) => {
-//           const { object } = await generateObject({
-//             model: openai("gpt-4o"),
-//             system:
-//               "You are a query understanding assistant. Analyze the user query and generate similar questions.",
-//             schema: z.object({
-//               questions: z
-//                 .array(z.string())
-//                 .max(3)
-//                 .describe("similar questions to the user's query. be concise."),
-//             }),
-//             prompt: `Analyze this query: "${query}". Provide the following:
-//                     3 similar questions that could help answer the user's query`,
-//           });
-//           return object.questions;
-//         },
-//       }),
-//     },
-//   });
-
-//   return result.toDataStreamResponse();
-// }

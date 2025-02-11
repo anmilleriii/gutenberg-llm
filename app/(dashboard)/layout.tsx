@@ -7,7 +7,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex flex-1 flex-col gap-4 p-4  max-w-screen-xl">
+        <div className="flex flex-1 flex-col gap-4 p-12  max-w-screen-xl">
           {children}
         </div>
       </SidebarInset>
