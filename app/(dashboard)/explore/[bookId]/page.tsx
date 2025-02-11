@@ -1,7 +1,7 @@
 import {
   getBookContentById,
   getBookMetadataById,
-} from "@/lib/clients/gutenberg-client";
+} from "@/lib/adapters/gutenberg";
 import { BookChatHeader } from "@/lib/features/chat/book-chat-header";
 import { Chat } from "@/lib/features/chat/chat";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";

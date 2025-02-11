@@ -3,7 +3,7 @@
 import {
   getBookMetadataById,
   GutendexBookMetadata,
-} from "@/lib/clients/gutenberg-client";
+} from "@/lib/adapters/gutenberg";
 import { z } from "zod";
 
 const authFormSchema = z.object({

@@ -1,18 +1,5 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Account` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "Account" DROP CONSTRAINT "Account_userId_fkey";
-
--- DropTable
-DROP TABLE "Account";
-
--- DropTable
-DROP TABLE "User";
+-- CreateExtension
+CREATE EXTENSION IF NOT EXISTS "vector";
 
 -- CreateTable
 CREATE TABLE "accounts" (
@@ -60,6 +47,18 @@ CREATE TABLE "verification_tokens" (
     "expires" TIMESTAMP(3) NOT NULL
 );
 
+-- CreateTable
+CREATE TABLE "saved_book" (
+    "id" TEXT NOT NULL,
+    "gutenbergBookId" TEXT NOT NULL,
+    "gutenbergBookImageHref" TEXT,
+    "user_id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "saved_book_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "accounts_provider_provider_account_id_key" ON "accounts"("provider", "provider_account_id");
 
@@ -72,8 +71,14 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 -- CreateIndex
 CREATE UNIQUE INDEX "verification_tokens_identifier_token_key" ON "verification_tokens"("identifier", "token");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "saved_book_gutenbergBookId_key" ON "saved_book"("gutenbergBookId");
+
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "saved_book" ADD CONSTRAINT "saved_book_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

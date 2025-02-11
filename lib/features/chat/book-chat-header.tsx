@@ -1,4 +1,4 @@
-import { GutendexBookMetadata } from "@/lib/clients/gutenberg-client";
+import { GutendexBookMetadata } from "@/lib/adapters/gutenberg";
 import Image from "next/image";
 import { SaveBookButton } from "./save-book-button";
 
