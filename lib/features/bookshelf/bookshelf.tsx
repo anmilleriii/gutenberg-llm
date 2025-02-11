@@ -1,54 +1,41 @@
-import { auth } from "@/auth";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@/components/ui/card";
-import { prisma } from "@/prisma/client";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
 import { DeleteBookButton } from "./delete-book";
-
-async function getSavedBooks() {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return null;
-  }
-
-  return prisma.savedBook.findMany({
-    where: {
-      userId: session.user.id,
-    },
-  });
-}
+import { getGutenbergBookMetadataOfSavedBooks } from "./queries";
 
 export async function Bookshelf() {
-  const books = await getSavedBooks();
+  const books = await getGutenbergBookMetadataOfSavedBooks();
 
   return (
     <div>
       <h1>Bookshelf</h1>
 
       {books?.map((book) => (
-        <Card key={book.gutenbergBookId}>
-          <CardHeader>
-            {book.gutenbergBookId} <DeleteBookButton savedBookId={book.id} />
-          </CardHeader>
-
-          {book.gutenbergBookImageHref && (
-            <Image
-              className="mx-12 my-4"
-              src={book.gutenbergBookImageHref}
-              width={150}
-              height={150}
-              alt={book.gutenbergBookId}
-            />
-          )}
-          <CardDescription>
-            {new Date(book.createdAt).toDateString()}
-          </CardDescription>
-          <CardContent></CardContent>
-        </Card>
+        <Link
+          className="hover:opacity-70 transition-[opacity]"
+          key={book.title}
+          href={`/explore/${book.gutenbergBookId}`}
+        >
+          <Card className="w-[300px]  aspect-video">
+            <CardHeader className="text-md font-semibold pb-2 space-y-4">
+              {/* todo  */}
+              <DeleteBookButton savedBookId={book.gutenbergBookId} />
+              {book.imageHref && (
+                <Image
+                  src={book.imageHref}
+                  width={100}
+                  height={100}
+                  alt={book.title ?? "Image"}
+                />
+              )}
+              <h2>{book.title}</h2>
+            </CardHeader>
+            <CardContent>
+              <p>{book.authors}</p>
+            </CardContent>
+          </Card>
+        </Link>
       ))}
     </div>
   );

@@ -10,7 +10,7 @@ import { ComponentPropsWithoutRef, useActionState, useEffect } from "react";
 
 import { cn } from "@/lib/utils/tailwind";
 import { SearchBooksResultsList } from "../search-books-results-list/search-books-results-list";
-import { queryBooksById } from "./actions";
+import { queryBooksById } from "./queries";
 
 export function SearchBooksForm({
   className,

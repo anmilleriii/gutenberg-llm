@@ -64,9 +64,8 @@ model VerificationToken {
 }
 
 model SavedBook {
-  id                     String  @id @default(cuid())
-  gutenbergBookId        String  @unique
-  gutenbergBookImageHref String?
+  id              String @id @default(cuid())
+  gutenbergBookId String @unique
 
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
