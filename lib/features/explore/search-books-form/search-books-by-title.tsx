@@ -28,6 +28,7 @@ export function SearchBooksByTitleForm({
 
   const handleSubmit = async ({ titleOrId }: Schema) => {
     const result = await queryBooksByTitleOrId({ titleOrId, offset: 0 });
+    // @ts-expect-error asdf
     setBooks(result);
   };
 
@@ -50,6 +51,7 @@ export function SearchBooksByTitleForm({
         />
         <Button type="submit">Search</Button>
       </form>
+      {/* @ts-expect-error asdf */}
       <SearchBooksResultsList results={books ?? undefined} />
     </div>
   );

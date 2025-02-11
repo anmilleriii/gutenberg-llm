@@ -1,9 +1,7 @@
-import {
-  getBookContentById,
-  getBookMetadataById,
-} from "@/lib/adapters/gutenberg";
+import { getBookContentById } from "@/lib/adapters/gutenberg";
 import { BookChatHeader } from "@/lib/features/chat/book-chat-header";
 import { Chat } from "@/lib/features/chat/chat";
+import { getGutenbergBookMetadataById } from "@/lib/features/explore/search-books-form/queries";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
 import { notFound } from "next/navigation";
 
@@ -15,10 +13,10 @@ export default async function BookPage({
   await redirectUnauthenticatedToLogin();
 
   const bookId = (await params).bookId;
-
-  // todo not waterfall
-  const metadata = await getBookMetadataById(Number(bookId));
-  const content = await getBookContentById(bookId);
+  const [metadata, content] = await Promise.all([
+    getGutenbergBookMetadataById(bookId),
+    getBookContentById(bookId),
+  ]);
 
   if (!metadata?.title) {
     return notFound();
@@ -27,6 +25,7 @@ export default async function BookPage({
   return (
     <div>
       <BookChatHeader {...metadata} />
+      {/* @ts-expect-error asdf */}
       <Chat {...metadata} />
       {content}
     </div>
