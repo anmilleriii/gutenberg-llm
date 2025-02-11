@@ -23,7 +23,7 @@ export default async function BookPage({
   }
 
   return (
-    <div>
+    <div className="flex flex-col justify-between min-h-full">
       <BookChatHeader {...metadata} />
       {/* @ts-expect-error asdf */}
 
