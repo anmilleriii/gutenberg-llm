@@ -1,6 +1,6 @@
 import { getBookContentById } from "@/lib/adapters/gutenberg";
 import { Chat } from "@/lib/features/chat/chat";
-import { createResource } from "@/lib/features/chat/rag/actions/resources";
+import { createResource } from "@/lib/features/chat/rag/mutations/resources";
 import { BookChatHeader } from "@/lib/features/search/book-detail/book-chat-header";
 import { getGutenbergBookMetadataById } from "@/lib/features/search/search-books-form/queries";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
