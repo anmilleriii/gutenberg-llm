@@ -1,7 +1,9 @@
 "use server";
 
-import { getBookMetadataById } from "@/lib/client/gutenberg-client";
-import { GutendexBookMetadata } from "@/lib/client/types";
+import {
+  getBookMetadataById,
+  GutendexBookMetadata,
+} from "@/lib/clients/gutenberg-client";
 import { z } from "zod";
 
 const authFormSchema = z.object({

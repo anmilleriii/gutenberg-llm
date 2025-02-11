@@ -9,7 +9,7 @@ import { prisma } from "@/prisma/client";
 import Image from "next/image";
 import { DeleteBookButton } from "./delete-book";
 
-async function getBooks() {
+async function getSavedBooks() {
   const session = await auth();
   if (!session?.user?.id) {
     return null;
@@ -21,10 +21,9 @@ async function getBooks() {
     },
   });
 }
+
 export async function Bookshelf() {
-  const books = await getBooks();
-  console.log({ books });
-  //   todo no n1
+  const books = await getSavedBooks();
 
   return (
     <div>

@@ -1,18 +1,12 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { GutendexBookMetadata } from "@/lib/client/types";
-import { cn } from "@/lib/utils";
+import { GutendexBookMetadata } from "@/lib/clients/gutenberg-client";
+import { cn } from "@/lib/utils/tailwind";
 import { useChat } from "ai/react";
 
-export function Chat({
-  title,
-  content,
-}: GutendexBookMetadata & { content: string }) {
+export function Chat({ title }: GutendexBookMetadata) {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
-
-  // TODO rag content
 
   const user = "Albert";
 
@@ -43,26 +37,12 @@ export function Chat({
               m.content
             ) : (
               <span className="italic font-light">
-                {"calling tool: " + m?.parts?.[0].toolName}
+                {"calling tool: " + m?.parts?.[0].type}
               </span>
             )}
           </p>
         </div>
       ))}
-    </div>
-  );
-}
-
-// function Message() {
-//   return (
-
-//   )
-// }
-
-function Suggestions() {
-  return (
-    <div className="flex flex-wrap">
-      <Badge>What</Badge>
     </div>
   );
 }

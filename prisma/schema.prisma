@@ -1,13 +1,13 @@
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DATABASE_URL_UNPOOLED")
+  extensions = [vector]
+}
+
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters", "postgresqlExtensions"]
-  extensions      = [vector]
-}
-
-datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model Account {
@@ -27,7 +27,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@map("accounts")
+  @@map("account")
 }
 
 model Session {
@@ -37,7 +37,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("sessions")
+  @@map("session")
 }
 
 model User {
@@ -51,7 +51,7 @@ model User {
   accounts   Account[]
   sessions   Session[]
 
-  @@map("users")
+  @@map("user")
 }
 
 model VerificationToken {
@@ -60,14 +60,8 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-  @@map("verification_tokens")
+  @@map("verification_token")
 }
-
-// // we store the index as a fast index of all books? alternatively gutendex
-// model GutenbergBookMetadata {
-//   id              String @id @default(cuid())
-//   gutenbergBookId String @unique
-// }
 
 model SavedBook {
   id                     String  @id @default(cuid())
@@ -78,51 +72,35 @@ model SavedBook {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("saved_book")
 }
 
-// export const embeddings = pgTable(
-//   'embeddings',
-//   {
-//     id: varchar('id', { length: 191 })
-//       .primaryKey()
-//       .$defaultFn(() => nanoid()),
-//     resourceId: varchar('resource_id', { length: 191 }).references(
-//       () => resources.id,
-//       { onDelete: 'cascade' },
-//     ),
-//     content: text('content').notNull(),
-//     embedding: vector('embedding', { dimensions: 1536 }).notNull(),
-//   },
-//   table => ({
-//     embeddingIndex: index('embeddingIndex').using(
-//       'hnsw',
-//       table.embedding.op('vector_cosine_ops'),
-//     ),
-//   }),
-// );
+model Embedding {
+  id     String                       @id @default(cuid())
+  vector Unsupported("vector(1536)")?
 
-model Embeddings {
-  id         String                       @id @default(cuid())
   resourceId String
-  content    String
-  embedding  Unsupported("vector(1536)")?
+  resource   Resource @relation(fields: [resourceId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  @@index([vector], map: "vector_hnsw")
+  @@map("embedding")
 }
 
 model Resource {
   id              String @id @default(cuid())
   gutenbergBookId String
-  content         String
+
+  content String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  Embedding Embedding[]
+
+  @@map("resource")
 }
-
-// model SavedChat {
-//   id              String @id @default(cuid())
-//   gutenbergBookId String @unique
-
-//   createdAt DateTime @default(now())
-// }

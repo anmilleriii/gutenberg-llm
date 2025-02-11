@@ -1,6 +1,29 @@
-import { GutendexBookMetadata } from "./types";
-
 const GUTENBERG_BASE_URL = "https://www.gutenberg.org";
+
+export interface GutendexBookMetadata {
+  id: number;
+  title: string;
+  authors: {
+    name: string;
+    birth_year: number;
+    death_year: number;
+  }[];
+  summaries: string[];
+  translators: {
+    name: string;
+    birth_year: number;
+    death_year: number;
+  }[];
+  subjects: string[];
+  bookshelves: string[];
+  languages: string[];
+  copyright: boolean;
+  media_type: string;
+  formats: {
+    [key: string]: string;
+  };
+  download_count: number;
+}
 
 export async function getBookContentById(bookId: string) {
   try {

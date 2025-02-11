@@ -1,19 +1,15 @@
-import { GutenbergBookContentResponse } from "../client/types";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { GutendexBookMetadata } from "../clients/gutenberg-client";
 
-export const mockBook: GutenbergBookContentResponse = {
-  id: 2554,
-  title: "Crime and Punishment",
-  content: "The Adventures of Sherlock Holmes",
-  metadata: {
-    title: "The Adventures of Sherlock Holmes",
-    content: "The Adventures of Sherlock Holmes",
-  },
-};
-// https://gutenberg.org/ebooks/2554
-export const mockBookMetadata = {
-  author: "Dostoyevsky, Fyodor, 1821-1881",
-  translator: "Garnett, Constance, 1861-1946",
-  uniformTitle: "Prestuplenie i nakazanie. English",
+export const mockBookMetadata: GutendexBookMetadata = {
+  authors: [
+    {
+      name: "Dostoyevsky, Fyodor, 1821-1881",
+      birth_year: 0,
+      death_year: 0,
+    },
+  ],
   title: "Crime and Punishment",
   note: [
     "Reading ease score: 83.0 (6th grade). Easy to read.",

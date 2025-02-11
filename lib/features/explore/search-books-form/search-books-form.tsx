@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+
 import { useRouter } from "next/navigation";
 import { ComponentPropsWithoutRef, useActionState, useEffect } from "react";
 
-import { RegisterActionState } from "../../auth/register-form/register-actions";
+import { cn } from "@/lib/utils/tailwind";
 import { SearchBooksResultsList } from "../search-books-results-list/search-books-results-list";
 import { queryBooksById } from "./actions";
 
@@ -18,17 +18,13 @@ export function SearchBooksForm({
 }: ComponentPropsWithoutRef<"form">) {
   const router = useRouter();
 
-  const [state, formAction] = useActionState<RegisterActionState, FormData>(
-    queryBooksById,
-    {
-      status: "idle",
-    }
-  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [state, formAction] = useActionState<any, FormData>(queryBooksById, {
+    status: "idle",
+  });
 
   useEffect(() => {
-    // todo
     if (state.status === "success") {
-      // router.push(`/explore/${state}`);
     }
   }, [state, router]);
 
@@ -41,7 +37,6 @@ export function SearchBooksForm({
       <Card className="min-w-96 w-1/2 aspect-video">
         <CardHeader>
           <CardTitle>Search Gutenberg books by ID</CardTitle>
-          {/* <CardDescription>Card Description</CardDescription> */}
         </CardHeader>
         <CardContent>
           <form

@@ -5,13 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Book } from "lucide-react";
 import { saveBook } from "./save-chat-actions";
 
-export function SaveBookButton({
-  bookId,
-  image,
-}: {
-  bookId: string;
-  image?: string;
-}) {
+export function SaveBookButton({ bookId }: { bookId: string; image?: string }) {
   const { toast } = useToast();
 
   const handleClick = async () => {
