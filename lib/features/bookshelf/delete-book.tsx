@@ -3,14 +3,13 @@
 import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { deleteBook } from "../chat/save-chat-actions";
 
 export function DeleteBookButton({ savedBookId }: { savedBookId: string }) {
   const router = useRouter();
   const { toast } = useToast();
 
   const handleClick = async () => {
-    await deleteBook({ savedBookId });
+    // await deleteBook({ savedBookId });
 
     toast({
       title: "Book deleted",

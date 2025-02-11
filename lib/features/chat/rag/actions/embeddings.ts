@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 
+import { generateEmbedding } from "@/lib/adapters/openai";
 import { prisma } from "@/prisma/client";
 
 export const writeEmbeddings = async ({
@@ -22,4 +23,21 @@ export const writeEmbeddings = async ({
   );
 
   await prisma.$executeRaw`INSERT INTO embedding ("resourceId", vector, content) VALUES ${rows}`;
+};
+
+export const querySimilarContent = async ({
+  resourceId,
+  content,
+}: {
+  resourceId: string;
+  content: string;
+}) => {
+  const vector = await generateEmbedding(content);
+
+  const results =
+    await prisma.$queryRaw`SELECT id, content FROM embedding WHERE embedding."resourceId" = ${resourceId} ORDER BY vector <=> ${JSON.stringify(
+      vector
+    )}::vector LIMIT 10`;
+
+  return results as { id: string; content: string }[];
 };

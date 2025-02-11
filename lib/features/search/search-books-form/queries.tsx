@@ -46,7 +46,7 @@ export async function queryBooksByTitleOrId({
   return result;
 }
 
-export async function getGutenbergBookMetadataById(id: string) {
+export async function getGutenbergBookMetadataById(id?: string) {
   const result = await prisma.gutenbergBookMetadata.findUnique({
     where: {
       gutenbergBookId: id,

@@ -1,7 +1,7 @@
 import { openai } from "@ai-sdk/openai";
 import { embed, embedMany } from "ai";
 
-const embeddingModel = openai.embedding("text-embedding-ada-002");
+const embeddingModel = openai.embedding("text-embedding-3-small");
 
 const generateChunks = (input: string): string[] => {
   return input
@@ -19,7 +19,6 @@ export const generateEmbeddings = async (
     model: embeddingModel,
     values: chunks,
   });
-
   return embeddings.map((e, i) => ({ content: chunks[i], embedding: e }));
 };
 

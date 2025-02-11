@@ -9,7 +9,7 @@ export async function sendVerificationEmail({
 }) {
   const resend = new Resend(process.env.AUTH_RESEND_KEY);
   await resend.emails.send({
-    from: "Gutenberg LLM <no-reply@gutenberg.anmiller.com>",
+    from: `Gutenberg LLM <${process.env.AUTH_RESEND_EMAIL}>`,
     to: identifier,
     subject: "Sign In",
     html: `

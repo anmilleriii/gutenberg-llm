@@ -34,7 +34,7 @@ export async function BookChatHeader({
             <p>Gutenberg Book ID: {gutenbergBookId}</p>
             <p>Bookshelves: {bookshelves}</p>
             <p>Subjects: {subjects}</p>
-            <p>Date Published: {new Date(dateIssued ?? "").toDateString()}</p>
+            {/* <p>Date Published: {new Date(dateIssued ?? "").toDateString()}</p> */}
           </div>
         </div>
       </div>
