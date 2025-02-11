@@ -5,10 +5,8 @@ import { prisma } from "@/prisma/client";
 
 export async function saveBook({
   gutenbergBookId,
-  gutenbergBookImageHref,
 }: {
   gutenbergBookId: string;
-  gutenbergBookImageHref?: string;
 }) {
   const session = await auth();
 
@@ -21,7 +19,6 @@ export async function saveBook({
   const result = await prisma.savedBook.create({
     data: {
       gutenbergBookId,
-      gutenbergBookImageHref,
       userId: session.user.id,
     },
   });
