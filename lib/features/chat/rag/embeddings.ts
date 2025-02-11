@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { prisma } from "@/prisma/client";
 import { groq } from "@ai-sdk/groq";
 import { embed, embedMany } from "ai";

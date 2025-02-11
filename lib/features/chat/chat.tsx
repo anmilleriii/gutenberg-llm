@@ -2,19 +2,24 @@
 
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { GutendexBookMetadata } from "@/lib/adapters/gutenberg";
+
 import { cn } from "@/lib/utils/tailwind";
+import { GutenbergBookMetadata } from "@prisma/client";
 
 import { useChat } from "ai/react";
 
-export function Chat({ title }: GutendexBookMetadata) {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+export function Chat({ title }: Pick<GutenbergBookMetadata, "title">) {
+  const { messages, input, handleInputChange, handleSubmit, addToolResult } =
+    useChat();
+  // addToolResult({
+  //   type: "addResource",
+  //   result:})
 
   return (
-    <div className="flex-grow flex flex-col justify-between w-full lg:w-1/2 mx-auto ">
+    <div className="flex-grow flex flex-col justify-between w-full xl:w-2/3 mx-auto ">
       {/* chips suggested questions */}
 
-      <ScrollArea className="h-[400px]  rounded-md border p-4">
+      <ScrollArea className="h-[400px] rounded-md border p-4">
         {messages.map((m) => (
           <div
             key={m.id}

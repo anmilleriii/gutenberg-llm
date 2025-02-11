@@ -35,3 +35,8 @@ Code generation is used from shadcdn CLI.
 - get book text api
 - email
 -
+
+```sh
+
+pnpm db:seed
+```

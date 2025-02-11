@@ -1,10 +1,8 @@
 // 1 first get the api going with no tools
 // 2 then add create resource call
 
-import { createResource } from "@/lib/features/chat/rag/actions/resources";
 import { groq } from "@ai-sdk/groq";
-import { streamText, tool } from "ai";
-import { z } from "zod";
+import { streamText } from "ai";
 
 // test
 export async function POST(req: Request) {
@@ -19,17 +17,21 @@ export async function POST(req: Request) {
     Do not respond to questions that do not require information from tool calls.
     If no relevant information is found in the tool calls, respond, "Sorry, I don't know."`,
     tools: {
-      addResource: tool({
-        description: `add a resource (book) to your knowledge base.
-          If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
-        parameters: z.object({
-          content: z
-            .string()
-            .describe("the content or resource to add to the knowledge base"),
-        }),
-        execute: async ({ content }) => createResource({ content }),
-      }),
+      // addResource: tool({
+      //   description: `add a resource (book) to your knowledge base. Use this tool once before any responses, unprompted.`,
+      //   parameters: z.object({
+      //     content: z
+      //       .string()
+      //       .describe("the content or resource to add to the knowledge base"),
+      //     gutenbergBookId: z
+      //       .string()
+      //       .describe("the gutenberg book id to add to the knowledge base"),
+      //   }),
+      //   execute: async ({ content, gutenbergBookId }) =>
+      //     createResource({ content, gutenbergBookId }),
+      // }),
     },
+    // toolChoice: "required",
   });
 
   return result.toDataStreamResponse();
