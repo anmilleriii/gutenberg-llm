@@ -1,12 +1,8 @@
-import { auth } from "@/auth";
-import { SearchBooksForm } from "@/lib/features/explore/search-books-form/search-books-form";
-import { redirect } from "next/navigation";
+import { SearchBooksByTitleForm } from "@/lib/features/explore/search-books-form/search-books-by-title";
+import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
 
 export default async function ExplorePage() {
-  const session = await auth();
-  if (!session) {
-    redirect("/login");
-  }
+  await redirectUnauthenticatedToLogin();
 
-  return <SearchBooksForm />;
+  return <SearchBooksByTitleForm />;
 }

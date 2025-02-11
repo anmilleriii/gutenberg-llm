@@ -1,11 +1,23 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SavedBook } from "@prisma/client";
+import { GutenbergBookMetadata } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 
-export function SearchBooksResultsList({ results }: { results: SavedBook[] }) {
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+export function SearchBooksResultsList({
+  results,
+}: {
+  results?: GutenbergBookMetadata[];
+}) {
   if (!results) {
     return null;
   }
@@ -18,26 +30,56 @@ export function SearchBooksResultsList({ results }: { results: SavedBook[] }) {
     );
   }
   return (
-    <Card>
-      <CardHeader className="text-xl font-semibold">Results</CardHeader>
-      <CardContent>
-        {results?.map((result) => (
-          <Link
-            className="hover:opacity-70 transition-[opacity]"
-            key={result.title}
-            href={`/explore/${result.id}`}
-          >
-            <Card>
-              <CardHeader className="text-lg font-semibold pb-2">
-                {result.title}
-              </CardHeader>
-              <CardContent>
-                <p>{result.authors?.[0].name}</p>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </CardContent>
-    </Card>
+    <div className="w-full  flex flex-row flex-wrap gap-12">
+      {results?.map((result) => (
+        <Link
+          className="hover:opacity-70 transition-[opacity]"
+          key={result.title}
+          href={`/explore/${result.gutenbergBookId}`}
+        >
+          <Card className="w-[300px]  aspect-video">
+            <CardHeader className="text-md font-semibold pb-2 space-y-4">
+              {result.imageHref && (
+                <Image
+                  src={result.imageHref}
+                  width={100}
+                  height={100}
+                  alt={result.title ?? "Image"}
+                />
+              )}
+              <h2>{result.title}</h2>
+            </CardHeader>
+            <CardContent>
+              <p>{result.authors}</p>
+            </CardContent>
+          </Card>
+        </Link>
+      ))}
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#" isActive>
+              2
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">3</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
   );
 }

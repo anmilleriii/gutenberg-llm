@@ -22,7 +22,6 @@ export interface GutendexBookMetadata {
   formats: {
     [key: string]: string;
   };
-  download_count: number;
 }
 
 export async function getBookContentById(bookId: string) {
@@ -37,14 +36,14 @@ export async function getBookContentById(bookId: string) {
   }
 }
 
-export async function getBookMetadataById(bookId: number) {
-  try {
-    const response = await fetch(`https://gutendex.com/books/${bookId}`);
-    return (await response.json()) as GutendexBookMetadata;
-  } catch (error) {
-    console.error(error);
-  }
-}
+// export async function getBookMetadataById(bookId: number) {
+//   try {
+//     const response = await fetch(`https://gutendex.com/books/${bookId}`);
+//     return (await response.json()) as GutendexBookMetadata;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
 
 // export async function getBookMetadataById(bookId: string) {
 //   try {

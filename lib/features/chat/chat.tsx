@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { GutendexBookMetadata } from "@/lib/clients/gutenberg-client";
+import { GutendexBookMetadata } from "@/lib/adapters/gutenberg";
 import { cn } from "@/lib/utils/tailwind";
 import { useChat } from "ai/react";
 

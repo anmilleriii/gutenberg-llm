@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { GutendexBookMetadata } from "../clients/gutenberg-client";
+import { GutendexBookMetadata } from "../adapters/gutenberg";
 
 export const mockBookMetadata: GutendexBookMetadata = {
   authors: [

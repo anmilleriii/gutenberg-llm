@@ -1,12 +1,16 @@
 import type { NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import Resend from "next-auth/providers/resend";
+import { default as ResendProvider } from "next-auth/providers/resend";
+import { sendVerificationEmail } from "./lib/adapters/resend";
 
 export default {
   providers: [
-    Resend({
+    ResendProvider({
       apiKey: process.env.AUTH_RESEND_KEY,
       from: process.env.AUTH_RESEND_EMAIL,
+      sendVerificationRequest: async ({ identifier, url }) => {
+        await sendVerificationEmail({ identifier, url });
+      },
     }),
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_CLIENT_ID,
@@ -14,17 +18,9 @@ export default {
     }),
   ],
   callbacks: {
-    // TODO middleware
     authorized: async ({ auth }) => {
       return !!auth;
     },
-    // jwt: async ({ token, user, account }) => {
-    //   if (user) {
-    //     token.id = user.id;
-    //   }
-    //   console.log({ user, token, account });
-    //   return token;
-    // },
     session: ({ session, token }) => ({
       ...session,
       user: {
@@ -33,5 +29,4 @@ export default {
       },
     }),
   },
-  debug: false,
 } satisfies NextAuthConfig;
