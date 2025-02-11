@@ -13,7 +13,7 @@ export async function sendVerificationEmail({
     to: identifier,
     subject: "Sign In",
     html: `
-<body style="background: #e0e0e0;">
+<body style="background: #e5e7eb;">
 <table width="100%" border="0" cellspacing="20" cellpadding="0"
 style="background: white; max-width: 600px; margin: auto; ">
 <tr>

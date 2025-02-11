@@ -22,7 +22,6 @@ export interface GutendexBookMetadata {
   formats: {
     [key: string]: string;
   };
-  download_count: number;
 }
 
 export async function getBookContentById(bookId: string) {
