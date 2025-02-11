@@ -4,14 +4,14 @@ import { Input } from "@/components/ui/input";
 import { GutendexBookMetadata } from "@/lib/adapters/gutenberg";
 import { cn } from "@/lib/utils/tailwind";
 import { useChat } from "ai/react";
+import { SessionProvider } from "next-auth/react";
+import { AgentAvatar, UserAvatar } from "./chat-avatar";
 
 export function Chat({ title }: GutendexBookMetadata) {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
 
-  const user = "Albert";
-
   return (
-    <div className="flex flex-col w-full py-24">
+    <div className="flex flex-col w-full lg:w-1/2 mx-auto ">
       <form onSubmit={handleSubmit}>
         <Input
           autoFocus
@@ -31,7 +31,14 @@ export function Chat({ title }: GutendexBookMetadata) {
             m.role === "user" ? "text-right" : "text-left"
           )}
         >
-          {m.role === "user" ? `${user}: ` : "Gutenberg LLM: "}
+          {m.role === "user" ? (
+            <SessionProvider>
+              <UserAvatar />
+            </SessionProvider>
+          ) : (
+            <AgentAvatar name="Gutenberg LLM" src="/gutenberg.webp" />
+          )}
+
           <p>
             {m.content.length > 0 ? (
               m.content

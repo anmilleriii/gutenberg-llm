@@ -1,15 +1,25 @@
 import { prisma } from "@/prisma/client";
 import { generateEmbeddings } from "./embeddings";
 
+/**
+ *  Flow is
+ * 1 get book text
+ * 2 chunk the text
+ * 3 Create a resource to associate with the Embeddings, including the content
+ * 4 generate an embedding for each chunk and write it to Embedding table
+ * 5 return
+ */
 export const writeEmbeddingsForContent = async (content: string) => {
   const embeddings = await generateEmbeddings(content);
   await prisma.$executeRaw`INSERT INTO embedding (vector, content) VALUES (${embeddings[0].embedding}::vector, ${embeddings[0].content})`;
   // resource?
 };
 
-export const getSimilarContentFromEmbedding = async (vecEmbed: number[]) => {
-  await prisma.$queryRaw`SELECT id, embedding::text FROM embedding ORDER BY vector >-> ${vecEmbed}::vector LIMIT 2`;
+export const getSimilarContentFromEmbedding = async (vector: number[]) => {
+  await prisma.$queryRaw`SELECT id, embedding::text FROM embedding ORDER BY vector >-> ${vector}::vector LIMIT 2`;
 };
+
+// cosine similarity since we don't care about the magintude of the vector
 
 //   const similarGuides = await db
 //     .select({ name: embeddings.content, similarity })
@@ -27,7 +37,7 @@ export const getSimilarContentFromEmbedding = async (vecEmbed: number[]) => {
 
 //   // Search/Query and retrieve embeddings
 //   const results =
-//     await prisma.$queryRaw`SELECT id, embedding::text FROM embedding ORDER BY vector >-> ${vecEmbed}::vector LIMIT 2`;
+//     await prisma.$queryRaw`SELECT id, embedding::text FROM embedding ORDER BY vector >-> ${vector}::vector LIMIT 2`;
 // }
 
 // main()

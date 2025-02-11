@@ -1,38 +1,45 @@
-// TODO
-// export const maxDuration = 30;
+// 1 first get the api going with no tools
+// 2 then add create resource call
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { createResource } from "@/lib/features/chat/rag/actions/resources";
+import { groq } from "@ai-sdk/groq";
+import { streamText, tool } from "ai";
+import { z } from "zod";
+
+// test
 export async function POST(req: Request) {
-  return new Response();
+  const { messages } = await req.json();
+
+  const result = streamText({
+    model: groq("llama-3.3-70b-versatile"),
+    messages,
+    system: `You are a helpful assistant. You are also a librarian. Check your knowledge base before answering any questions.
+    If a response requires information from an additional tool to generate a response, call the appropriate tools in order before responding to the user.
+    Only respond to questions using information from tool calls.
+    Do not respond to questions that do not require information from tool calls.
+    If no relevant information is found in the tool calls, respond, "Sorry, I don't know."`,
+    tools: {
+      addResource: tool({
+        description: `add a resource (book) to your knowledge base.
+          If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
+        parameters: z.object({
+          content: z
+            .string()
+            .describe("the content or resource to add to the knowledge base"),
+        }),
+        execute: async ({ content }) => createResource({ content }),
+      }),
+    },
+  });
+
+  return result.toDataStreamResponse();
 }
-//   const { messages } = await req.json();
-
-//   const result = streamText({
-//     model: groq("llama-3.3-70b-versatile"),
-//     messages,
-//     system: `You are a helpful assistant. Check your knowledge base before answering any questions.
-//     Only respond to questions using information from tool calls.
-//     if no relevant information is found in the tool calls, respond, "Sorry, I don't know."`,
-//     tools: {
-//       addResource: tool({
-//         description: `add a resource to your knowledge base.
-//           If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
-//         parameters: z.object({
-//           content: z
-//             .string()
-//             .describe("the content or resource to add to the knowledge base"),
-//         }),
-//         execute: async ({ content }) => createResource({ content }),
-//       }),
-//     },
-//   });
-
-//   return result.toDataStreamResponse();
-// }
 
 // import { findRelevantContent } from "@/lib/ai/embedding";
+// import { groq } from "@ai-sdk/groq";
 // import { openai } from "@ai-sdk/openai";
-// import { generateObject } from "ai";
+// import { generateObject, streamText, tool } from "ai";
+// import { z } from "zod";
 
 // // Allow streaming responses up to 30 seconds
 // export const maxDuration = 30;

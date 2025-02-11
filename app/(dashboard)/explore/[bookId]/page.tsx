@@ -1,7 +1,7 @@
 import { getBookContentById } from "@/lib/adapters/gutenberg";
-import { BookChatHeader } from "@/lib/features/chat/book-chat-header";
 import { Chat } from "@/lib/features/chat/chat";
-import { getGutenbergBookMetadataById } from "@/lib/features/explore/search-books-form/queries";
+import { BookChatHeader } from "@/lib/features/search/book-detail/book-chat-header";
+import { getGutenbergBookMetadataById } from "@/lib/features/search/search-books-form/queries";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
 import { notFound } from "next/navigation";
 
@@ -26,8 +26,8 @@ export default async function BookPage({
     <div>
       <BookChatHeader {...metadata} />
       {/* @ts-expect-error asdf */}
+
       <Chat {...metadata} />
-      {content}
     </div>
   );
 }

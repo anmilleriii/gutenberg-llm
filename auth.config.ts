@@ -25,6 +25,7 @@ export default {
       ...session,
       user: {
         ...session.user,
+        email: token.email,
         id: token.sub,
       },
     }),

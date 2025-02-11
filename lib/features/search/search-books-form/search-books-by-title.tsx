@@ -34,14 +34,12 @@ export function SearchBooksByTitleForm({
 
   return (
     <div className="flex flex-col gap-4 ">
-      <h1 className="text-2xl font-bold">
-        Search Gutenberg books by Title or Gutenberg Book ID
-      </h1>
+      <h1 className="text-4xl font-bold">Explore the Gutenberg Archives</h1>
       <form
         onSubmit={methods.handleSubmit(handleSubmit)}
         className={cn("flex flex-col gap-6 lg:w-1/2", className)}
       >
-        <Label>Gutenberg Book Title or ID</Label>
+        <Label>Search by author, title, or Gutenberg ID</Label>
         <Input
           type="text"
           id="titleOrId"
