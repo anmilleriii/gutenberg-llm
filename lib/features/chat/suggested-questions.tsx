@@ -24,7 +24,7 @@ export function SuggestedQuestions({
         Chat with <strong>{title}</strong>
         <br />
         <br />
-        Here are some questions to get you started
+        Here are some questions to get you started:
       </AlertTitle>
       <AlertDescription>
         <div className="flex flex-row flex-wrap w-fit gap-3">

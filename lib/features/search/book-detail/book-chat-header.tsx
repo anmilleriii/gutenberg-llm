@@ -21,7 +21,7 @@ export async function BookChatHeader({
           <Image
             className="mx-12 my-4"
             src={imageHref}
-            width={100}
+            width={150}
             height={100}
             alt={title ?? ""}
           />

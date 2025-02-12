@@ -24,9 +24,9 @@ export function NavUser({
   user,
 }: {
   user: {
-    name: string;
-    email: string;
-    avatar: string;
+    name?: string;
+    email?: string;
+    avatar?: string;
   };
 }) {
   const { isMobile } = useSidebar();
@@ -74,7 +74,7 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut()}>
+            <DropdownMenuItem onClick={() => signOut({ redirectTo: "/login" })}>
               <LogOut />
               Log out
             </DropdownMenuItem>

@@ -49,7 +49,7 @@ export function SearchBooksByTitleForm({
           onSubmit={methods.handleSubmit(handleSubmit)}
           className={cn("flex flex-col gap-6 ", className)}
         >
-          <Label className="text-lg">
+          <Label className="text-lg font-semibold">
             Search books by author, title, or Gutenberg book ID
           </Label>
           <div className="flex flex-col lg:flex-row items-center gap-10 ">

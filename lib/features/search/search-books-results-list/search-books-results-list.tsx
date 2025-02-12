@@ -17,19 +17,19 @@ export function SearchBooksResultsList({
   }
 
   return (
-    <div className="gap-4 space-y-4 columns-1 sm:columns-2 md:columns-3 lg:columns-4 sm:mx-auto ">
+    <div className="gap-4 columns-1 sm:columns-2 md:columns-3 lg:columns-4 w-full  min-w-fit xl:w-2/3">
       {results?.map((result, index) => (
         <Link
           className="hover:opacity-70 transition-[opacity] h-fit w-full"
           key={`${result.title}-${index}`}
           href={`/explore/${result.gutenbergBookId}`}
         >
-          <Card className="min-w-[300px] max-w-[400px] break-inside-avoid-column aspect-video">
-            <CardHeader className="pb-2 space-y-4">
+          <Card className="min-w-[300px] max-w-[400px] break-inside-avoid-column aspect-video my-10">
+            <CardHeader className="pb-2 gap-6 flex flex-col items-center">
               {result.imageHref && (
                 <Image
                   src={result.imageHref}
-                  width={100}
+                  width={200}
                   height={100}
                   alt={result.title ?? "Image"}
                 />
