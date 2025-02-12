@@ -1,4 +1,4 @@
-import { GutenbergBookMetadata } from "@prisma/client";
+import { GutenbergBookMetadata, SavedBook, User } from "@prisma/client";
 
 export const mockBookMetadata: GutenbergBookMetadata = {
   id: "1",
@@ -13,3 +13,28 @@ export const mockBookMetadata: GutenbergBookMetadata = {
   createdAt: new Date(),
   updatedAt: new Date(),
 };
+
+export const mockUser: User = {
+  id: "c123xy",
+  email: "gutenberg@example.com",
+  emailVerified: new Date(),
+  image: null,
+  name: "Gutenberg",
+};
+
+export const mockSavedBooks: SavedBook[] = [
+  {
+    id: "c123xy",
+    gutenbergBookId: 5,
+    userId: mockUser.id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "c456xy",
+    gutenbergBookId: 6,
+    userId: mockUser.id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];

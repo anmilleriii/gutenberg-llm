@@ -13,8 +13,8 @@ import { GutenbergBookMetadata } from "@prisma/client";
 import { Search } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { SearchBooksResultsList } from "../search-books-results-list/search-books-results-list";
-import { queryBooks } from "./queries";
+import { queryBooks } from "./actions";
+import { SearchBooksResultsList } from "./search-books-results-list";
 
 const schema = z.object({
   query: z.string().min(3, "Title or ID must be at least 3 characters"),

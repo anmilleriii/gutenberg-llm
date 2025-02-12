@@ -1,0 +1,1 @@
+Create `prisma/seeds/gutenberg_metadata.csv` from https://www.gutenberg.org/ebooks/offline_catalogs.html prior to running `pnpm db:seed`

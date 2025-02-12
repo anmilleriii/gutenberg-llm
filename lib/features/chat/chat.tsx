@@ -51,6 +51,7 @@ export function Chat({
               )}
             >
               <p
+                role="article"
                 className={cn(
                   m.role === "user"
                     ? "px-4 py-2  text-muted-foreground rounded-md bg-muted w-fit"

@@ -1,10 +1,10 @@
 import { GutenbergBookMetadata } from "@prisma/client";
 import { default as Image } from "next/image";
-import { DeleteBookButton } from "../../bookshelf/delete-book";
-import { getSavedBookById } from "../../bookshelf/queries";
-import { SaveBookButton } from "../../bookshelf/save-book-button";
+import { getSavedBookById } from "../bookshelf/actions";
+import { DeleteBookButton } from "../bookshelf/delete-book-button";
+import { SaveBookButton } from "../bookshelf/save-book-button";
 
-export async function BookChatHeader({
+export async function BookHeader({
   title,
   gutenbergBookId,
   imageHref,

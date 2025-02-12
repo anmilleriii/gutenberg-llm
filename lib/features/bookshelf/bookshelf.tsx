@@ -2,8 +2,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { BookMarked } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { DeleteBookButton } from "./delete-book";
-import { getGutenbergBookMetadataOfSavedBooks } from "./queries";
+import { getGutenbergBookMetadataOfSavedBooks } from "./actions";
+import { DeleteBookButton } from "./delete-book-button";
 
 export async function Bookshelf() {
   const books = await getGutenbergBookMetadataOfSavedBooks();

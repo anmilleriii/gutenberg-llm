@@ -1,5 +1,5 @@
-import { querySimilarContent } from "@/lib/features/chat/rag/actions/embeddings";
-import { getGutenbergBookMetadataById } from "@/lib/features/search/search-books-form/queries";
+import { querySimilarContent } from "@/lib/features/chat/actions/embeddings";
+import { getGutenbergBookMetadataById } from "@/lib/features/search/actions";
 import { groq } from "@ai-sdk/groq";
 import { generateObject, generateText, streamText, tool } from "ai";
 import { headers } from "next/headers";
@@ -51,7 +51,6 @@ export async function POST(req: Request) {
           const uniqueResults = Array.from(
             new Map(results.flat().map((item) => [item?.id, item])).values()
           );
-          console.log({ uniqueResults });
           return uniqueResults;
         },
       }),

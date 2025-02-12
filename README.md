@@ -1,5 +1,6 @@
 # Gutenberg
 
+![Gutenberg](docs/gutenberg.png)
 See [demo and design writeup here](https://anmiller.com/essays/gutenberg-llm).
 
 ## Development

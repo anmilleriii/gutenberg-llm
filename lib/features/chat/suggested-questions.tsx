@@ -6,7 +6,7 @@ export function SuggestedQuestions({
   onClick,
 }: {
   title: string | null;
-  onClick: (question: string) => void;
+  onClick?: (question: string) => void;
 }) {
   const suggestedQuestions = [
     `Summarize ${title}`,
@@ -33,7 +33,7 @@ export function SuggestedQuestions({
               className="cursor-pointer hover:bg-accent-foreground hover:text-accent"
               key={question}
               variant="secondary"
-              onClick={() => onClick(question)}
+              onClick={() => onClick?.(question)}
             >
               {question}
             </Badge>
