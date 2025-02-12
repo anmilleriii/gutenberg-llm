@@ -1,39 +1,29 @@
+"use server";
+
 import { prisma } from "@/prisma/client";
-import { Resource } from "@prisma/client";
-import { generateEmbeddings } from "../../../../adapters/openai";
+
+import { generateEmbeddings } from "@/lib/adapters/openai";
 import { writeEmbeddings } from "./embeddings";
 
-export async function createResource({
+export async function createEmbeddingsForBook({
   content,
   gutenbergBookId,
-}: Pick<Resource, "content" | "gutenbergBookId">) {
-  const existingResource = await prisma.resource.findFirst({
-    where: { gutenbergBookId },
+}: {
+  content: string;
+  gutenbergBookId: number;
+}) {
+  const existingEmbedding = await prisma.embedding.findFirst({
+    where: { gutenbergBookMetadata: { gutenbergBookId: gutenbergBookId } },
   });
 
-  if (existingResource) {
+  if (existingEmbedding) {
     return;
   }
-
-  const resource = await prisma.resource.upsert({
-    where: { gutenbergBookId },
-    update: {},
-    create: { content, gutenbergBookId },
-  });
 
   const embeddings = await generateEmbeddings(content);
 
   await writeEmbeddings({
-    resourceId: String(resource.id),
+    gutenbergBookId,
     embeddings,
   });
-
-  return;
-}
-
-export async function getResourceIdByGutenbergBookId(gutenbergBookId?: string) {
-  const resource = await prisma.resource.findUnique({
-    where: { gutenbergBookId },
-  });
-  return resource?.id;
 }

@@ -29,12 +29,13 @@ export function SearchBooksResultsList({
       </Card>
     );
   }
+  console.log({ results });
   return (
     <div className="w-full  flex flex-row flex-wrap gap-12">
-      {results?.map((result) => (
+      {results?.map((result, index) => (
         <Link
           className="hover:opacity-70 transition-[opacity]"
-          key={result.title}
+          key={`${result.title}-${index}`}
           href={`/explore/${result.gutenbergBookId}`}
         >
           <Card className="w-[300px]  aspect-video">

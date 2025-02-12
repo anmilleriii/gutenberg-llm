@@ -4,18 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { ComponentPropsWithoutRef, useState } from "react";
+import { ComponentPropsWithoutRef, useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils/tailwind";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GutenbergBookMetadata } from "@prisma/client";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { SearchBooksResultsList } from "../search-books-results-list/search-books-results-list";
-import { queryBooksByTitleOrId } from "./queries";
+import { queryBooks } from "./queries";
 
 const schema = z.object({
-  titleOrId: z.string().min(3, "Title or ID must be at least 3 characters"),
+  query: z.string().min(3, "Title or ID must be at least 3 characters"),
 });
 
 type Schema = z.infer<typeof schema>;
@@ -23,13 +24,33 @@ type Schema = z.infer<typeof schema>;
 export function SearchBooksByTitleForm({
   className,
 }: ComponentPropsWithoutRef<"form">) {
+  const router = useRouter();
   const methods = useForm<Schema>({ resolver: zodResolver(schema) });
   const [books, setBooks] = useState<GutenbergBookMetadata | null>(null);
+  const searchParams = useSearchParams();
+  const paramQuery = searchParams.get("query");
+  const offset = searchParams.get("offset");
 
-  const handleSubmit = async ({ titleOrId }: Schema) => {
-    const result = await queryBooksByTitleOrId({ titleOrId, offset: 0 });
-    // @ts-expect-error asdf
-    setBooks(result);
+  // set fetching
+
+  useEffect(() => {
+    async function fetchData() {
+      if (paramQuery) {
+        const result = await queryBooks({
+          query: paramQuery,
+          offset: offset ? parseInt(offset) : 0,
+        });
+        setBooks(result);
+      }
+    }
+    fetchData();
+
+    // const result = await queryBooks({ query, offset: 0 });
+    // setBooks(result);
+  }, [offset, paramQuery]);
+
+  const handleSubmit = async ({ query }: Schema) => {
+    router.push(`/explore?query=${query}&offset=${0}`);
   };
 
   return (
@@ -39,17 +60,16 @@ export function SearchBooksByTitleForm({
         onSubmit={methods.handleSubmit(handleSubmit)}
         className={cn("flex flex-col gap-6 lg:w-1/2", className)}
       >
-        <Label>Search by author, title, or Gutenberg ID</Label>
+        <Label>Search books by author, title, or Gutenberg book ID</Label>
         <Input
           type="text"
-          id="titleOrId"
+          id="query"
           autoFocus
           placeholder="Crime and Punishment"
-          {...methods.register("titleOrId")}
+          {...methods.register("query")}
         />
         <Button type="submit">Search</Button>
       </form>
-      {/* @ts-expect-error asdf */}
       <SearchBooksResultsList results={books ?? undefined} />
     </div>
   );

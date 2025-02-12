@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: PropsWithChildren) {
                   height={28}
                 />
               </div>
-              <span className="text-sm">Gutenberg LLM</span>
+              <span className="text-sm ">Gutenberg LLM</span>
             </Link>
           </div>
           <div className="flex flex-1 items-center justify-center">

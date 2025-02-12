@@ -1,5 +1,4 @@
 import { querySimilarContent } from "@/lib/features/chat/rag/actions/embeddings";
-import { getResourceIdByGutenbergBookId } from "@/lib/features/chat/rag/actions/resources";
 import { getGutenbergBookMetadataById } from "@/lib/features/search/search-books-form/queries";
 import { groq } from "@ai-sdk/groq";
 import { generateObject, generateText, streamText, tool } from "ai";
@@ -12,12 +11,13 @@ export async function POST(req: Request) {
   const headersList = await headers();
   const referer = headersList.get("referer");
   const gutenbergBookId = referer?.split("/explore/")[1];
-  const resourceId = await getResourceIdByGutenbergBookId(gutenbergBookId);
-  const metadata = await getGutenbergBookMetadataById(gutenbergBookId);
 
-  if (!resourceId || !metadata) {
-    return new Response("Resource not found", { status: 404 });
+  if (!gutenbergBookId) {
+    throw new Error("Not found");
   }
+  const metadata = await getGutenbergBookMetadataById(
+    parseInt(gutenbergBookId)
+  );
 
   const result = streamText({
     model: groq("llama-3.3-70b-versatile"),
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
         },
       }),
       understandQuery: tool({
-        description: `understand the users query. use this tool on every prompt.`,
+        description: `understand the users query.`,
         parameters: z.object({
           query: z.string().describe("the users query"),
           toolsToCallInOrder: z
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
         },
       }),
       getBookMetadata: tool({
-        description: `get book metadata and overview information. use this tool on every prompt.`,
+        description: `get book metadata and overview information. use this tool if the user asks about the book itself, not the plot of the book.`,
         parameters: z.object({
           query: z.string().describe("the users query"),
         }),
@@ -111,7 +111,21 @@ export async function POST(req: Request) {
           return result.text;
         },
       }),
+      // answer: tool({
+      //   description:
+      //     "Use this tool regardless of the tools called prior to this. The final response should always use this tool.",
+      //   parameters: z.object({
+      //     steps: z.array(
+      //       z.object({
+      //         reasoning: z.string(),
+      //       })
+      //     ),
+      //     answer: z.string(),
+      //   }),
+      // }),
     },
+    // toolChoice: "required",
+    // maxSteps: 6,
   });
 
   return result.toDataStreamResponse();

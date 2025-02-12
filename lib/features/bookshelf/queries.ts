@@ -7,7 +7,6 @@ export async function getGutenbergBookMetadataOfSavedBooks() {
     return null;
   }
 
-  // metadata where gutenbergBookId is in saved books of user id
   const savedBookIds = await prisma.savedBook.findMany({
     where: {
       userId: session.user.id,

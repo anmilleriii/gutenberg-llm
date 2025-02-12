@@ -9,7 +9,7 @@ export async function Bookshelf() {
 
   return (
     <div>
-      <h1>Bookshelf</h1>
+      <h1>Saved Books</h1>
 
       {books?.map((book) => (
         <Link

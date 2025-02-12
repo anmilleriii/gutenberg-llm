@@ -3,7 +3,6 @@ import { default as Image } from "next/image";
 
 export async function BookChatHeader({
   title,
-  dateIssued,
   gutenbergBookId,
   imageHref,
   authors,
@@ -12,7 +11,7 @@ export async function BookChatHeader({
 }: GutenbergBookMetadata) {
   return (
     <div>
-      <div className="flex items-center ">
+      <div className="flex flex-col md:flex-row items-center text-center md:text-left ">
         {imageHref && (
           <Image
             className="mx-12 my-4"

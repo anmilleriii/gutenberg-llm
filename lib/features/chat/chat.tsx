@@ -9,7 +9,11 @@ import { GutenbergBookMetadata } from "@prisma/client";
 import { useChat } from "ai/react";
 import { useRef } from "react";
 
-export function Chat({ title }: Pick<GutenbergBookMetadata, "title">) {
+export function Chat({
+  title,
+}: Pick<GutenbergBookMetadata, "title" | "gutenbergBookId"> & {
+  content: string;
+}) {
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
       maxSteps: 4,
@@ -21,19 +25,19 @@ export function Chat({ title }: Pick<GutenbergBookMetadata, "title">) {
     <div className="flex-grow flex flex-col justify-between w-full xl:w-4/5 mx-auto ">
       {/* chips suggested questions */}
 
-      <ScrollArea ref={scrollRef} className="h-[500px] rounded-md  p-4">
+      <ScrollArea ref={scrollRef} className=" rounded-md  p-4">
         {messages.map((m) => (
           <div
             key={m.id}
             className={cn(
-              "flex justify-end gap-4 py-4",
+              "flex justify-end gap-4 py-4 text-sm",
               m.role === "user" ? "text-right" : "text-left"
             )}
           >
             <p
               className={cn(
                 m.role === "user"
-                  ? "px-4 py-1 text-muted-foreground rounded-md bg-muted w-fit"
+                  ? "px-4 py-2  text-muted-foreground rounded-md bg-muted w-fit"
                   : "text-slate-500 w-full"
               )}
             >
@@ -42,7 +46,7 @@ export function Chat({ title }: Pick<GutenbergBookMetadata, "title">) {
                 m.content
               ) : (
                 <span className="italic font-light">
-                  {`Reading ${title}...`}
+                  {isLoading ? `Reading ${title}...` : "Something went wrong"}
                 </span>
               )}
             </p>

@@ -6,7 +6,14 @@
 
 [] Demo video
 
+mobile
+
 ## Features
+
+```sh
+
+pnpm db:seed
+```
 
 ### Gutenberg chat
 
@@ -27,16 +34,23 @@ Next application deployed on Vercel. Groq is the LLM provider, connected using t
 
 Code generation is used from shadcdn CLI.
 
-# TODO
+# Todo
+
+- conversation longer than 5 steps
+- something went wrong
+- save book button
+- active link
+- default form value
+- pagination maybe
+- chat history maybe
+- search history
+- chips with suggested questions maybe
+- summary generated to side maybe...
+-
+
+# Done
 
 - Search gutenberg books by text in DB
 - Store gutenberg books in DB
-- embeddings w/prisma
 - get book text api
-- email
--
-
-```sh
-
-pnpm db:seed
-```
+- embeddings w/prisma
