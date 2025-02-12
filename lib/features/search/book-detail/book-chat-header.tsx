@@ -1,5 +1,7 @@
 import { GutenbergBookMetadata } from "@prisma/client";
 import { default as Image } from "next/image";
+import { DeleteBookButton } from "../../bookshelf/delete-book";
+import { getSavedBookById } from "../../bookshelf/queries";
 import { SaveBookButton } from "../../bookshelf/save-book-button";
 
 export async function BookChatHeader({
@@ -10,6 +12,8 @@ export async function BookChatHeader({
   bookshelves,
   subjects,
 }: GutenbergBookMetadata) {
+  const savedBook = await getSavedBookById(gutenbergBookId);
+
   return (
     <div>
       <div className="flex flex-col md:flex-row items-center text-center md:text-left w-full xl:w-4/5 mx-auto ">
@@ -23,7 +27,14 @@ export async function BookChatHeader({
           />
         )}
         <div className="flex flex-col items-center md:items-start w-full gap-4">
-          <SaveBookButton gutenbergBookId={gutenbergBookId} />
+          {savedBook ? (
+            <DeleteBookButton
+              gutenbergBookId={savedBook?.gutenbergBookId}
+              title={title}
+            />
+          ) : (
+            <SaveBookButton gutenbergBookId={gutenbergBookId} title={title} />
+          )}
           <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl">
             {title}
           </h1>
@@ -34,7 +45,6 @@ export async function BookChatHeader({
             <p>Gutenberg Book ID: {gutenbergBookId}</p>
             <p>Bookshelves: {bookshelves}</p>
             <p>Subjects: {subjects}</p>
-            {/* <p>Date Published: {new Date(dateIssued ?? "").toDateString()}</p> */}
           </div>
         </div>
       </div>

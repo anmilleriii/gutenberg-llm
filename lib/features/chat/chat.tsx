@@ -19,7 +19,6 @@ export function Chat({
     messages,
     input,
     handleInputChange,
-    setInput,
     handleSubmit,
     append,
     isLoading,
@@ -31,6 +30,13 @@ export function Chat({
   const handleClickQuestion = (question: string) => {
     // setInput(question);
     append({ role: "user", content: question });
+  };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmit(event);
+    }
   };
 
   return (
@@ -79,6 +85,7 @@ export function Chat({
               className="pt-4 pb-24 items-start resize-none "
               value={input}
               placeholder={`Ask a question about ${title}`}
+              onKeyDown={handleKeyDown}
               onChange={handleInputChange}
             />
           </form>

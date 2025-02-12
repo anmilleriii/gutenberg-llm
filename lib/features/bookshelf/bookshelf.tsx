@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { BookMarked } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { DeleteBookButton } from "./delete-book";
@@ -8,35 +9,46 @@ export async function Bookshelf() {
   const books = await getGutenbergBookMetadataOfSavedBooks();
 
   return (
-    <div>
-      <h1>Saved Books</h1>
+    <div className="flex flex-col gap-12  w-full">
+      <h1 className="inline-flex items-center gap-3">
+        <BookMarked height={46} width={46} />
+        Saved Books
+      </h1>
 
-      {books?.map((book) => (
-        <Link
-          className="hover:opacity-70 transition-[opacity]"
-          key={book.title}
-          href={`/explore/${book.gutenbergBookId}`}
-        >
-          <Card className="w-[300px]  aspect-video">
-            <CardHeader className="text-md font-semibold pb-2 space-y-4">
-              {/* todo  */}
-              <DeleteBookButton savedBookId={book.gutenbergBookId} />
-              {book.imageHref && (
-                <Image
-                  src={book.imageHref}
-                  width={100}
-                  height={100}
-                  alt={book.title ?? "Image"}
-                />
-              )}
-              <h2>{book.title}</h2>
+      <div className="gap-6 space-y-6 columns-1 sm:columns-2 md:columns-3 lg:columns-4">
+        {books?.map((book) => (
+          <Card
+            key={book.gutenbergBookId}
+            className="max-w-[400px] break-inside-avoid-column aspect-video"
+          >
+            <CardHeader>
+              <Link
+                className="hover:opacity-70 transition-[opacity] flex flex-col items-center gap-4"
+                href={`/explore/${book.gutenbergBookId}`}
+              >
+                <div className="relative h-64 aspect-square">
+                  {book.imageHref && (
+                    <Image
+                      src={book.imageHref}
+                      fill
+                      className="object-contain"
+                      alt={book.title ?? "Image"}
+                    />
+                  )}
+                </div>
+                <h3>{book.title}</h3>
+              </Link>
             </CardHeader>
-            <CardContent>
-              <p>{book.authors}</p>
+            <CardContent className="flex flex-col gap-2">
+              <p className="text-sm">{book.authors}</p>
+              <DeleteBookButton
+                gutenbergBookId={book.gutenbergBookId}
+                title={book.title}
+              />
             </CardContent>
           </Card>
-        </Link>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

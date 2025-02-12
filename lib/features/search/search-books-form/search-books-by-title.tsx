@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { ComponentPropsWithoutRef, Suspense, useState } from "react";
+import { ComponentPropsWithoutRef, useState } from "react";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils/tailwind";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GutenbergBookMetadata } from "@prisma/client";
+import { Search } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { SearchBooksResultsList } from "../search-books-results-list/search-books-results-list";
@@ -38,27 +39,40 @@ export function SearchBooksByTitleForm({
   };
 
   return (
-    <Suspense fallback={<Skeleton className="h-48 aspect-square" />}>
-      <div className="flex flex-col gap-4  w-full">
-        <h1 className="text-4xl font-bold">Explore the Gutenberg Archives</h1>
+    <div className="flex flex-col gap-12 ">
+      <h1 className="inline-flex items-center gap-3">
+        <Search className="min-h-[50px] min-w-[50px]" height={50} width={50} />
+        Explore the Gutenberg Archives
+      </h1>
+      <Card className="p-12 lg:w-2/3">
         <form
           onSubmit={methods.handleSubmit(handleSubmit)}
-          className={cn("flex flex-col gap-6 lg:w-1/2", className)}
+          className={cn("flex flex-col gap-6 ", className)}
         >
-          <Label>Search books by author, title, or Gutenberg book ID</Label>
-          <Input
-            autoFocus
-            type="text"
-            id="query"
-            placeholder="Crime and Punishment"
-            {...methods.register("query")}
-          />
-          <Button type="submit">Search</Button>
+          <Label className="text-lg">
+            Search books by author, title, or Gutenberg book ID
+          </Label>
+          <div className="flex flex-col lg:flex-row items-center gap-10 ">
+            <Input
+              autoFocus
+              type="text"
+              id="query"
+              placeholder="Crime and Punishment"
+              className="h-12"
+              {...methods.register("query")}
+            />
+            <Button
+              type="submit"
+              className="p-6 text-xl font-bold hover:bg-accent hover:text-accent-foreground"
+            >
+              Search
+            </Button>
+          </div>
         </form>
-        <SearchBooksResultsList
-          results={!books ? null : Array.isArray(books) ? books : [books]}
-        />
-      </div>
-    </Suspense>
+      </Card>
+      <SearchBooksResultsList
+        results={!books ? null : Array.isArray(books) ? books : [books]}
+      />
+    </div>
   );
 }

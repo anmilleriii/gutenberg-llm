@@ -13,22 +13,18 @@ export function SearchBooksResultsList({
   }
 
   if (results.length === 0) {
-    return (
-      <Card>
-        <CardHeader className="text-xl font-semibold">No results</CardHeader>
-      </Card>
-    );
+    return <h3>No results</h3>;
   }
 
   return (
-    <div className="w-full  flex flex-row flex-wrap gap-12">
+    <div className="gap-4 space-y-4 columns-1 sm:columns-2 md:columns-3 lg:columns-4 sm:mx-auto ">
       {results?.map((result, index) => (
         <Link
-          className="hover:opacity-70 transition-[opacity]"
+          className="hover:opacity-70 transition-[opacity] h-fit w-full"
           key={`${result.title}-${index}`}
           href={`/explore/${result.gutenbergBookId}`}
         >
-          <Card className="w-[300px]  aspect-video">
+          <Card className="min-w-[300px] max-w-[400px] break-inside-avoid-column aspect-video">
             <CardHeader className="pb-2 space-y-4">
               {result.imageHref && (
                 <Image
@@ -41,7 +37,7 @@ export function SearchBooksResultsList({
               <h4>{result.title}</h4>
             </CardHeader>
             <CardContent>
-              <p>{result.authors}</p>
+              <p className="text-sm">{result.authors}</p>
             </CardContent>
           </Card>
         </Link>

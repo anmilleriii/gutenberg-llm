@@ -15,6 +15,7 @@ export function SuggestedQuestions({
     "Is this a true story?",
     "How far into the the book does the climax occur? Describe it.",
     "Are there any plot twists?",
+    "Is this book based on a true story?",
   ];
 
   return (
