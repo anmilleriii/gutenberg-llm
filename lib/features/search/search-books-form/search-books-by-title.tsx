@@ -1,19 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { ComponentPropsWithoutRef, useState } from "react";
 
-import { ComponentPropsWithoutRef, useEffect, useState } from "react";
-
-import { cn } from "@/lib/utils/tailwind";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GutenbergBookMetadata } from "@prisma/client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { SearchBooksResultsList } from "../search-books-results-list/search-books-results-list";
 import { queryBooks } from "./queries";
+import { SearchBar } from "./search-bar";
 
 const schema = z.object({
   query: z.string().min(3, "Title or ID must be at least 3 characters"),
@@ -27,36 +22,25 @@ export function SearchBooksByTitleForm({
   const router = useRouter();
   const methods = useForm<Schema>({ resolver: zodResolver(schema) });
   const [books, setBooks] = useState<GutenbergBookMetadata | null>(null);
-  const searchParams = useSearchParams();
-  const paramQuery = searchParams.get("query");
-  const offset = searchParams.get("offset");
 
-  // set fetching
+  const handleSubmit = async (e: string) => {
+    // router.push(`/explore?query=${e}`);
+    console.log(e);
+    const result = await queryBooks({
+      query: e,
+      // offset: offset ? parseInt(offset) : 0,
+    });
 
-  useEffect(() => {
-    async function fetchData() {
-      if (paramQuery) {
-        const result = await queryBooks({
-          query: paramQuery,
-          offset: offset ? parseInt(offset) : 0,
-        });
-        setBooks(result);
-      }
-    }
-    fetchData();
-
-    // const result = await queryBooks({ query, offset: 0 });
-    // setBooks(result);
-  }, [offset, paramQuery]);
-
-  const handleSubmit = async ({ query }: Schema) => {
-    router.push(`/explore?query=${query}&offset=${0}`);
+    setBooks(result);
+    console.log(result);
   };
+  // router.push(`/explore?query=${query}&offset=${0}`);
 
   return (
     <div className="flex flex-col gap-4 ">
       <h1 className="text-4xl font-bold">Explore the Gutenberg Archives</h1>
-      <form
+      <SearchBar onValueChange={handleSubmit} results={books} />
+      {/* <form
         onSubmit={methods.handleSubmit(handleSubmit)}
         className={cn("flex flex-col gap-6 lg:w-1/2", className)}
       >
@@ -69,8 +53,8 @@ export function SearchBooksByTitleForm({
           {...methods.register("query")}
         />
         <Button type="submit">Search</Button>
-      </form>
-      <SearchBooksResultsList results={books ?? undefined} />
+      </form> */}
+      {/* <SearchBooksResultsList results={books ?? undefined} /> */}
     </div>
   );
 }

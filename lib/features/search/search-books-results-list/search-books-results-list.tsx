@@ -29,7 +29,7 @@ export function SearchBooksResultsList({
       </Card>
     );
   }
-  console.log({ results });
+
   return (
     <div className="w-full  flex flex-row flex-wrap gap-12">
       {results?.map((result, index) => (
