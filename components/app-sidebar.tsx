@@ -52,7 +52,7 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "Bookshelf",
+          title: "Saved Books",
           url: "/bookshelf",
         },
         {
@@ -69,7 +69,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         <SessionProvider>

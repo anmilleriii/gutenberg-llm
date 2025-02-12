@@ -4,40 +4,48 @@ import { generateEmbedding } from "@/lib/adapters/openai";
 import { prisma } from "@/prisma/client";
 
 export const writeEmbeddings = async ({
-  resourceId,
+  gutenbergBookId,
   embeddings,
 }: {
-  resourceId: string;
+  gutenbergBookId: number;
   embeddings: {
     embedding: number[];
     content: string;
   }[];
 }) => {
+  const metadata = await prisma.gutenbergBookMetadata.findUniqueOrThrow({
+    where: { gutenbergBookId },
+  });
+
   const rows = Prisma.join(
     embeddings.map(
       (embedding) =>
-        Prisma.sql`(${resourceId}, ${JSON.stringify(
+        Prisma.sql`(${metadata.id}, ${JSON.stringify(
           embedding.embedding
         )}::vector, ${embedding.content})`
     )
   );
 
-  await prisma.$executeRaw`INSERT INTO embedding ("resourceId", vector, content) VALUES ${rows}`;
+  await prisma.$executeRaw`INSERT INTO embedding ("gutenbergBookMetadataId", vector, content) VALUES ${rows}`;
 };
 
 export const querySimilarContent = async ({
-  resourceId,
+  gutenbergBookId,
   content,
 }: {
-  resourceId: string;
+  gutenbergBookId: number;
   content: string;
 }) => {
+  const metadata = await prisma.gutenbergBookMetadata.findUniqueOrThrow({
+    where: { gutenbergBookId },
+  });
+
   const vector = await generateEmbedding(content);
 
   const results =
-    await prisma.$queryRaw`SELECT id, content FROM embedding WHERE embedding."resourceId" = ${resourceId} ORDER BY vector <=> ${JSON.stringify(
-      vector
-    )}::vector LIMIT 10`;
+    await prisma.$queryRaw`SELECT id, content FROM embedding WHERE embedding."gutenbergBookMetadataId" = ${
+      metadata.id
+    } ORDER BY vector <=> ${JSON.stringify(vector)}::vector LIMIT 10`;
 
   return results as { id: string; content: string }[];
 };

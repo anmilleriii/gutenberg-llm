@@ -26,7 +26,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@map("accounts")
+  @@map("account")
 }
 
 model Session {
@@ -36,7 +36,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("sessions")
+  @@map("session")
 }
 
 model User {
@@ -49,7 +49,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  @@map("users")
+  @@map("user")
 }
 
 model VerificationToken {
@@ -58,12 +58,12 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-  @@map("verification_tokens")
+  @@map("verification_token")
 }
 
 model SavedBook {
   id              String   @id @default(cuid())
-  gutenbergBookId String   @unique
+  gutenbergBookId Int      @unique
   userId          String   @map("user_id")
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt       DateTime @default(now())
@@ -73,37 +73,29 @@ model SavedBook {
 }
 
 model GutenbergBookMetadata {
-  id              String   @id @default(cuid())
-  gutenbergBookId String   @unique
+  id              String      @id @default(cuid())
+  gutenbergBookId Int         @unique
   imageHref       String?
   title           String?
   authors         String?
   subjects        String?
   bookshelves     String?
   dateIssued      String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @default(now())
+  Embedding       Embedding[]
 
   @@map("gutenberg_book_metadata")
 }
 
-model Resource {
-  id              Int      @id @default(autoincrement())
-  gutenbergBookId String   @unique
-  content         String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
-
-  @@map("resource")
-}
-
 model Embedding {
-  id         Int                         @id @default(autoincrement())
-  resourceId String
-  vector     Unsupported("vector(1536)")
-  content    String
-  createdAt  DateTime                    @default(now())
-  updatedAt  DateTime                    @default(now())
+  id                      Int                         @id @default(autoincrement())
+  vector                  Unsupported("vector(1536)")
+  content                 String
+  createdAt               DateTime                    @default(now())
+  updatedAt               DateTime                    @default(now())
+  gutenbergBookMetadataId String
+  gutenbergBookMetadata   GutenbergBookMetadata       @relation(fields: [gutenbergBookMetadataId], references: [id])
 
   @@index([vector], map: "vector_hnsw")
   @@map("embedding")

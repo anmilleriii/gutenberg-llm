@@ -1,16 +1,17 @@
 import { getBookContentById } from "@/lib/adapters/gutenberg";
-import { Chat } from "@/lib/features/chat/chat";
-import { createEmbeddingsForBook } from "@/lib/features/chat/rag/actions/resources";
 
+import { BookChatHeader } from "@/lib/features/search/book-detail/book-chat-header";
 import { getGutenbergBookMetadataById } from "@/lib/features/search/search-books-form/queries";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
 import { notFound } from "next/navigation";
+import { PropsWithChildren } from "react";
 
-export default async function BookPage({
+export default async function BookLayout({
   params,
-}: {
+  children,
+}: PropsWithChildren<{
   params: Promise<{ bookId: string }>;
-}) {
+}>) {
   await redirectUnauthenticatedToLogin();
 
   const bookId = parseInt((await params).bookId);
@@ -23,10 +24,10 @@ export default async function BookPage({
     return notFound();
   }
 
-  await createEmbeddingsForBook({
-    content,
-    gutenbergBookId: bookId,
-  });
-
-  return <Chat {...metadata} content={content} />;
+  return (
+    <div className="flex flex-col justify-between min-h-full">
+      <BookChatHeader {...metadata} />
+      {children}
+    </div>
+  );
 }

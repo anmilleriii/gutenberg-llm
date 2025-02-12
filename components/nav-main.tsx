@@ -18,15 +18,18 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
+import Link from "next/link";
 import { SidebarItem } from "./app-sidebar";
 
 export function NavMain({ items }: { items: SidebarItem[] }) {
   return (
     <SidebarGroup>
-      <SidebarHeader className="flex flex-row items-end">
-        <Image src="/gutenberg.webp" alt="logo" width={28} height={28} />
-        <span className="text-sm ">Gutenberg LLM</span>
-      </SidebarHeader>
+      <Link href="/explore" className="mb-8">
+        <SidebarHeader className="flex flex-row flex-wrap items-end">
+          <Image src="/gutenberg.webp" alt="logo" width={28} height={28} />
+          <span className="text-sm text-muted-foreground ">Gutenberg LLM</span>
+        </SidebarHeader>
+      </Link>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible

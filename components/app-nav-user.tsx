@@ -12,6 +12,5 @@ export function AppNavUser() {
     avatar: data?.user?.image,
   };
 
-  // @ts-expect-error - asdf
   return <NavUser user={user} />;
 }

@@ -2,25 +2,36 @@
 
 import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { BookX } from "lucide-react";
+import { deleteSavedBook } from "./queries";
 
-export function DeleteBookButton({ savedBookId }: { savedBookId: string }) {
-  const router = useRouter();
+export function DeleteBookButton({
+  title,
+  gutenbergBookId,
+}: {
+  title: string | null;
+  gutenbergBookId: number;
+}) {
   const { toast } = useToast();
 
-  const handleClick = async () => {
-    // await deleteBook({ savedBookId });
+  const handleDeleteSavedBook = async () => {
+    await deleteSavedBook(gutenbergBookId);
 
     toast({
-      title: "Book deleted",
-      description: "View your books in your bookshelf",
+      title: `${title} removed from bookshelf`,
+      variant: "destructive",
+      description: "You can readd it to your bookshelf anytime",
     });
-    router.refresh();
   };
 
   return (
-    <Button onClick={handleClick} variant="link" className="text-destructive">
-      Remove
+    <Button
+      onClick={handleDeleteSavedBook}
+      variant="link"
+      className="text-destructive z-50 text-xs place-self-end text-right my-4"
+    >
+      <BookX />
+      Remove from Bookshelf
     </Button>
   );
 }

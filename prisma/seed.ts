@@ -18,7 +18,9 @@ async function main() {
     )
       .pipe(csv.parse({ headers: true }))
       // @ts-expect-error - any
-      .on("data", (row) => rows.push(row))
+      .on("data", (row) =>
+        rows.push({ ...row, gutenbergBookId: parseInt(row.gutenbergBookId) })
+      )
       .on("error", reject)
       .on("end", () => resolve(rows));
   });

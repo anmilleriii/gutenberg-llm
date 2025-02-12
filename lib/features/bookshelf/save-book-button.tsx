@@ -3,24 +3,41 @@
 import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Book } from "lucide-react";
-import { saveBook } from "../chat/save-chat-actions";
+import Link from "next/link";
+import { saveBook } from "./queries";
 
-export function SaveBookButton({ bookId }: { bookId: string; image?: string }) {
+export function SaveBookButton({
+  title,
+  gutenbergBookId,
+}: {
+  title: string | null;
+  gutenbergBookId: number;
+}) {
   const { toast } = useToast();
-  // todo get books don't show
-  const handleClick = async () => {
-    await saveBook({ gutenbergBookId: bookId });
+
+  const handleSaveBook = async () => {
+    await saveBook(gutenbergBookId);
 
     toast({
-      title: "Book saved",
-      description: "View your books in your bookshelf",
+      title: `${title} saved`,
+      description: (
+        <p>
+          View your books in your{" "}
+          <Link href="/bookshelf" className="underline font-semibold">
+            bookshelf
+          </Link>
+        </p>
+      ),
     });
   };
 
   return (
-    <Button onClick={handleClick} className="place-self-end right-0">
+    <Button
+      onClick={handleSaveBook}
+      className="my-4 hover:bg-accent hover:text-accent-foreground md:place-self-end right-0"
+    >
       <Book />
-      Save to Bookshelf
+      Add to Bookshelf
     </Button>
   );
 }

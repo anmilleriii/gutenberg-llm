@@ -3,42 +3,29 @@ import { GutenbergBookMetadata } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-
 export function SearchBooksResultsList({
   results,
 }: {
-  results?: GutenbergBookMetadata[];
+  results: GutenbergBookMetadata[] | null;
 }) {
   if (!results) {
     return null;
   }
 
   if (results.length === 0) {
-    return (
-      <Card>
-        <CardHeader className="text-xl font-semibold">No results</CardHeader>
-      </Card>
-    );
+    return <h3>No results</h3>;
   }
+
   return (
-    <div className="w-full  flex flex-row flex-wrap gap-12">
-      {results?.map((result) => (
+    <div className="gap-4 space-y-4 columns-1 sm:columns-2 md:columns-3 lg:columns-4 sm:mx-auto ">
+      {results?.map((result, index) => (
         <Link
-          className="hover:opacity-70 transition-[opacity]"
-          key={result.title}
+          className="hover:opacity-70 transition-[opacity] h-fit w-full"
+          key={`${result.title}-${index}`}
           href={`/explore/${result.gutenbergBookId}`}
         >
-          <Card className="w-[300px]  aspect-video">
-            <CardHeader className="text-md font-semibold pb-2 space-y-4">
+          <Card className="min-w-[300px] max-w-[400px] break-inside-avoid-column aspect-video">
+            <CardHeader className="pb-2 space-y-4">
               {result.imageHref && (
                 <Image
                   src={result.imageHref}
@@ -47,39 +34,14 @@ export function SearchBooksResultsList({
                   alt={result.title ?? "Image"}
                 />
               )}
-              <h2>{result.title}</h2>
+              <h4>{result.title}</h4>
             </CardHeader>
             <CardContent>
-              <p>{result.authors}</p>
+              <p className="text-sm">{result.authors}</p>
             </CardContent>
           </Card>
         </Link>
       ))}
-
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   );
 }

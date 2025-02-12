@@ -2,33 +2,40 @@
 
 import { prisma } from "@/prisma/client";
 
-export async function queryBooksByTitleOrId({
-  titleOrId,
-  offset = 0,
+function maybeParseQueryToInt(query?: string) {
+  const result = parseInt(query ?? "");
+  if (isNaN(result)) {
+    return false;
+  }
+  return result;
+}
+
+export async function queryBooks({
+  query,
   limit = 25,
 }: {
-  titleOrId: string;
+  query: string;
   offset?: number;
   limit?: number;
 }) {
+  const isQueryId = maybeParseQueryToInt(query);
+
+  if (isQueryId) {
+    return await getGutenbergBookMetadataById(isQueryId);
+  }
+
   const result = await prisma.gutenbergBookMetadata.findMany({
     where: {
       OR: [
         {
           title: {
-            contains: titleOrId,
-            mode: "insensitive",
-          },
-        },
-        {
-          gutenbergBookId: {
-            contains: titleOrId,
+            contains: query,
             mode: "insensitive",
           },
         },
         {
           authors: {
-            contains: titleOrId,
+            contains: query,
             mode: "insensitive",
           },
         },
@@ -36,17 +43,15 @@ export async function queryBooksByTitleOrId({
     },
     distinct: ["id"],
     orderBy: {
-      // TODO
-      dateIssued: "desc",
+      title: "asc",
     },
-    skip: offset,
     take: limit,
   });
 
   return result;
 }
 
-export async function getGutenbergBookMetadataById(id?: string) {
+export async function getGutenbergBookMetadataById(id?: number) {
   const result = await prisma.gutenbergBookMetadata.findUnique({
     where: {
       gutenbergBookId: id,

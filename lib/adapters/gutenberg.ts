@@ -24,7 +24,7 @@ export interface GutendexBookMetadata {
   };
 }
 
-export async function getBookContentById(bookId: string) {
+export async function getBookContentById(bookId: number) {
   try {
     const response = await fetch(
       `${GUTENBERG_BASE_URL}/files/${bookId}/${bookId}-0.txt`
