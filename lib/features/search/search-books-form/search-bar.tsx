@@ -3,53 +3,45 @@
 import {
   Command,
   CommandEmpty,
+  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { GutenbergBookMetadata } from "@prisma/client";
 
 import { useState } from "react";
 
 interface SearchInputProps {
-  results: GutenbergBookMetadata[];
-  onValueChange?: (value: string) => void;
+  searchList: { id: string; name: string }[];
 }
 
-export function SearchBar({ results, onValueChange }: SearchInputProps) {
-  const [value, setValue] = useState<string | undefined>(undefined);
-  const [flag, setFlag] = useState<boolean>(false);
-
-  const handleValueChange = (value: string) => {
-    setValue(value);
-    if (flag) {
-      setTimeout(() => {
-        setFlag(false);
-      }, 2000);
-    } else {
-      onValueChange?.(value);
-      setFlag(true);
-    }
-  };
+export function FilterSearchInput({ searchList }: SearchInputProps) {
+  const [value, setValue] = useState("");
 
   return (
-    <Command inputMode="text">
+    <Command
+      inputMode="text"
+      className="bg-black w-[250px] rounded-lg  border-gray-400 text-txtWhite relative"
+    >
       <CommandInput
-        autoFocus
         className="h-full"
-        onValueChange={handleValueChange}
         value={value}
-        placeholder="Search..."
+        onValueChange={(e) => setValue(e)}
+        placeholder="search..."
       />
       {value && (
         <CommandList className="border-none">
-          <CommandEmpty>No books found</CommandEmpty>
-          {results?.map((book) => (
-            <CommandItem key={book.id}>
-              <span>{JSON.stringify(book.title)}</span>
-              <span>{JSON.stringify(book.authors)}</span>
-            </CommandItem>
-          ))}
+          <CommandEmpty>No results found</CommandEmpty>
+          <CommandGroup heading="Users">
+            {searchList.map((item) => {
+              return (
+                <CommandItem key={item.id}>
+                  <span>{item.name}</span>
+                  <span>{item.id ?? ""}</span>
+                </CommandItem>
+              );
+            })}
+          </CommandGroup>
         </CommandList>
       )}
     </Command>
