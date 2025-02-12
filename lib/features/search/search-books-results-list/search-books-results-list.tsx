@@ -3,20 +3,10 @@ import { GutenbergBookMetadata } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-
 export function SearchBooksResultsList({
   results,
 }: {
-  results?: GutenbergBookMetadata[];
+  results: GutenbergBookMetadata[] | null;
 }) {
   if (!results) {
     return null;
@@ -29,7 +19,7 @@ export function SearchBooksResultsList({
       </Card>
     );
   }
-  console.log({ results });
+
   return (
     <div className="w-full  flex flex-row flex-wrap gap-12">
       {results?.map((result, index) => (
@@ -39,7 +29,7 @@ export function SearchBooksResultsList({
           href={`/explore/${result.gutenbergBookId}`}
         >
           <Card className="w-[300px]  aspect-video">
-            <CardHeader className="text-md font-semibold pb-2 space-y-4">
+            <CardHeader className="pb-2 space-y-4">
               {result.imageHref && (
                 <Image
                   src={result.imageHref}
@@ -48,7 +38,7 @@ export function SearchBooksResultsList({
                   alt={result.title ?? "Image"}
                 />
               )}
-              <h2>{result.title}</h2>
+              <h4>{result.title}</h4>
             </CardHeader>
             <CardContent>
               <p>{result.authors}</p>
@@ -56,31 +46,6 @@ export function SearchBooksResultsList({
           </Card>
         </Link>
       ))}
-
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   );
 }

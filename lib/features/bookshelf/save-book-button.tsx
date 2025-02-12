@@ -4,11 +4,17 @@ import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Book } from "lucide-react";
 
-export function SaveBookButton({ bookId }: { bookId: string; image?: string }) {
+import { saveBook } from "./queries";
+
+export function SaveBookButton({
+  gutenbergBookId,
+}: {
+  gutenbergBookId: number;
+}) {
   const { toast } = useToast();
 
   const handleClick = async () => {
-    await saveBook({ gutenbergBookId: bookId });
+    await saveBook(gutenbergBookId);
 
     toast({
       title: "Book saved",
@@ -17,7 +23,7 @@ export function SaveBookButton({ bookId }: { bookId: string; image?: string }) {
   };
 
   return (
-    <Button onClick={handleClick} className="place-self-end right-0">
+    <Button onClick={handleClick} className="md:place-self-end right-0">
       <Book />
       Save to Bookshelf
     </Button>

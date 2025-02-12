@@ -12,7 +12,6 @@ function maybeParseQueryToInt(query?: string) {
 
 export async function queryBooks({
   query,
-  offset = 0,
   limit = 25,
 }: {
   query: string;
@@ -46,7 +45,6 @@ export async function queryBooks({
     orderBy: {
       title: "asc",
     },
-    skip: offset,
     take: limit,
   });
 
