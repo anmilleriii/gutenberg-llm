@@ -18,6 +18,7 @@ export function Chat({
   const {
     messages,
     input,
+    setInput,
     handleInputChange,
     handleSubmit,
     append,
@@ -34,6 +35,8 @@ export function Chat({
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
+      console.log({ event });
+      setInput(event.currentTarget.value);
       handleSubmit(event);
     }
   };
@@ -41,7 +44,7 @@ export function Chat({
   return (
     <>
       <div className="flex-grow flex flex-col justify-between w-full xl:w-4/5 mx-auto ">
-        <ScrollArea ref={scrollRef} className=" rounded-md  p-4">
+        <ScrollArea ref={scrollRef} className=" rounded-md  p-4 max-h-full">
           {messages.map((m) => (
             <div
               key={m.id}
@@ -76,10 +79,12 @@ export function Chat({
           <form
             onSubmit={(e) => {
               handleSubmit(e);
-              scrollRef.current?.scrollTo(0, 0);
+              // scrollRef.current?.scrollTo(0, 0);
             }}
           >
             <Textarea
+              key="chat-input"
+              id="chat-input"
               autoFocus
               className="pt-4 pb-24 items-start resize-none "
               value={input}

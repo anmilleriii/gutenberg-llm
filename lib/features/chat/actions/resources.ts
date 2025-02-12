@@ -13,7 +13,7 @@ export async function createEmbeddingsForBook({
   gutenbergBookId: number;
 }) {
   const existingEmbedding = await prisma.embedding.findFirst({
-    where: { gutenbergBookMetadata: { gutenbergBookId: gutenbergBookId } },
+    where: { gutenbergBookMetadata: { gutenbergBookId } },
   });
 
   if (existingEmbedding) {
