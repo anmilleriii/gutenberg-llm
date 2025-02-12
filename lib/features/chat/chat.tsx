@@ -28,7 +28,6 @@ export function Chat({
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleClickQuestion = (question: string) => {
-    // setInput(question);
     append({ role: "user", content: question });
   };
 
@@ -76,7 +75,6 @@ export function Chat({
           <form
             onSubmit={(e) => {
               handleSubmit(e);
-              // todo
               scrollRef.current?.scrollTo(0, 0);
             }}
           >
