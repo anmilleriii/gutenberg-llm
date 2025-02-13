@@ -1,7 +1,8 @@
-import { Prisma } from "@prisma/client";
+"use server";
 
-import { generateEmbedding } from "@/lib/adapters/openai";
+import { generateEmbedding, generateEmbeddings } from "@/lib/adapters/openai";
 import { prisma } from "@/prisma/client";
+import { Prisma } from "@prisma/client";
 
 export const writeEmbeddings = async ({
   gutenbergBookId,
@@ -49,3 +50,30 @@ export const querySimilarContent = async ({
 
   return results as { id: string; content: string }[];
 };
+
+export async function createEmbeddingsForBook({
+  content,
+  gutenbergBookId,
+}: {
+  content: string;
+  gutenbergBookId: number;
+}) {
+  const existingEmbedding = await prisma.embedding.findFirst({
+    where: { gutenbergBookMetadata: { gutenbergBookId } },
+  });
+
+  if (existingEmbedding) {
+    return;
+  }
+
+  const embeddings = await generateEmbeddings(content);
+
+  if (!embeddings) {
+    return;
+  }
+
+  await writeEmbeddings({
+    gutenbergBookId,
+    embeddings,
+  });
+}

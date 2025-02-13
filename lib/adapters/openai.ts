@@ -12,22 +12,32 @@ const generateChunks = (input: string): string[] => {
 
 export const generateEmbeddings = async (
   value: string
-): Promise<Array<{ embedding: number[]; content: string }>> => {
+): Promise<Array<{ embedding: number[]; content: string }> | undefined> => {
   const chunks = generateChunks(value);
 
-  const { embeddings } = await embedMany({
-    model: embeddingModel,
-    values: chunks,
-  });
-  return embeddings.map((e, i) => ({ content: chunks[i], embedding: e }));
+  try {
+    const { embeddings } = await embedMany({
+      model: embeddingModel,
+      values: chunks,
+    });
+    return embeddings.map((e, i) => ({ content: chunks[i], embedding: e }));
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-export const generateEmbedding = async (value: string): Promise<number[]> => {
+export const generateEmbedding = async (
+  value: string
+): Promise<number[] | undefined> => {
   const input = value.replaceAll("\\n", " ");
-  const { embedding } = await embed({
-    model: embeddingModel,
-    value: input,
-  });
 
-  return embedding;
+  try {
+    const { embedding } = await embed({
+      model: embeddingModel,
+      value: input,
+    });
+    return embedding;
+  } catch (e) {
+    console.error(e);
+  }
 };
