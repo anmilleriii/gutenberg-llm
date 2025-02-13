@@ -18,6 +18,7 @@ export function Chat({
   const {
     messages,
     input,
+    error,
     setInput,
     handleInputChange,
     handleSubmit,
@@ -60,7 +61,7 @@ export function Chat({
   return (
     <>
       <div className=" flex flex-col gap-12 justify-between w-full xl:w-3/5 mx-auto py-4 ">
-        <ScrollArea ref={scrollRef} className=" max-h-[700px] px-6 pb-4">
+        <ScrollArea ref={scrollRef} className=" max-h-[400px] px-6 pb-2">
           {messages.map((m) => (
             <div
               key={m.id}
@@ -81,7 +82,9 @@ export function Chat({
                   m.content
                 ) : (
                   <span className="italic font-light">
-                    {isLoading ? `Reading ${title}...` : "Something went wrong"}
+                    {isLoading
+                      ? `Reading ${title}...`
+                      : error?.message ?? "Something went wrong..."}
                   </span>
                 )}
               </p>
