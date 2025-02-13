@@ -9,13 +9,12 @@ export function SuggestedQuestions({
   onClick?: (question: string) => void;
 }) {
   const suggestedQuestions = [
-    `Summarize ${title}`,
+    `Summarize ${title}.`,
+    "Is this a nonfictional or fictional book?",
     "Who are the protagonist and antagonists?",
     "Are there any romantic relationships in the book?",
     "Is this a true story?",
-    "How far into the the book does the climax occur? Describe it.",
     "Are there any plot twists?",
-    "Is this book based on a true story?",
   ];
 
   return (

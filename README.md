@@ -1,6 +1,7 @@
-# Gutenberg
+# Gutenberg LLM
 
-![Gutenberg](docs/gutenberg.png)
+![Gutenberg LLM](docs/gutenberg.png)
+
 See [demo and design writeup here](https://anmiller.com/essays/gutenberg-llm).
 
 ## Development
@@ -11,6 +12,8 @@ git clone https://github.com/anmilleriii/gutenberg-llm.git
 
 # Install
 pnpm i
+pnpm db:seed
+pnpm db:migrate
 
 # Get env
 vercel auth login

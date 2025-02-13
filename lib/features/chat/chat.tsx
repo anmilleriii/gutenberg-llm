@@ -34,7 +34,6 @@ export function Chat({
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      console.log({ scrollRef });
       if (scrollRef.current) {
         const scrollViewport = scrollRef.current.querySelector(
           "[data-radix-scroll-area-viewport]"
@@ -49,7 +48,6 @@ export function Chat({
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      console.log({ event });
       setInput(event.currentTarget.value);
       handleSubmit(event);
     }
@@ -61,8 +59,8 @@ export function Chat({
 
   return (
     <>
-      <div className=" flex flex-col gap-12 justify-between w-full xl:w-4/5 mx-auto py-4 ">
-        <ScrollArea ref={scrollRef} className=" max-h-[600px] px-6 pb-4">
+      <div className=" flex flex-col gap-12 justify-between w-full xl:w-3/5 mx-auto py-4 ">
+        <ScrollArea ref={scrollRef} className=" max-h-[700px] px-6 pb-4">
           {messages.map((m) => (
             <div
               key={m.id}
@@ -91,7 +89,7 @@ export function Chat({
           ))}
         </ScrollArea>
 
-        <div className="space-y-4 justify-self-end ">
+        <div className="space-y-4 justify-self-end">
           {!input && !messages.length && (
             <SuggestedQuestions title={title} onClick={handleClickQuestion} />
           )}
@@ -102,7 +100,10 @@ export function Chat({
               autoFocus
               className="pt-4 pb-24 items-start resize-none bg-background shadow-md"
               value={input}
-              placeholder={`Ask a question about ${title}`}
+              placeholder={`Ask a question about ${title?.replaceAll(
+                /(\r\n|\n|\r)/gm,
+                ""
+              )}`}
               onKeyDown={handleKeyDown}
               onChange={handleInputChange}
             />
