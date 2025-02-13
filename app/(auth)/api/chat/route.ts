@@ -5,6 +5,8 @@ import { generateText, streamText, tool } from "ai";
 import { headers } from "next/headers";
 import { z } from "zod";
 
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
