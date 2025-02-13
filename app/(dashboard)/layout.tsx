@@ -10,7 +10,9 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         <AppNavUser />
       </AppSidebar>
       <SidebarInset>
-        <div className="flex flex-1 flex-col gap-4 p-12 ">{children}</div>
+        <div className="flex flex-1 flex-col gap-4 p-12 overflow-y-hidden">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );
