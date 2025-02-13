@@ -4,7 +4,7 @@ import { generateEmbedding, generateEmbeddings } from "@/lib/adapters/openai";
 import { prisma } from "@/prisma/client";
 import { Prisma } from "@prisma/client";
 
-const BATCH_SIZE = 500;
+const BATCH_SIZE = 13000;
 
 export const writeEmbeddings = async ({
   gutenbergBookId,
@@ -20,9 +20,9 @@ export const writeEmbeddings = async ({
     where: { gutenbergBookId },
   });
 
-  for (let i = 0; i < embeddings.length; i += BATCH_SIZE) {
-    const batch = embeddings.slice(i, i + BATCH_SIZE);
-    try {
+  try {
+    for (let i = 0; i < embeddings.length; i += BATCH_SIZE) {
+      const batch = embeddings.slice(i, i + BATCH_SIZE);
       const rows = Prisma.join(
         batch.map(
           (embedding) =>
@@ -33,9 +33,9 @@ export const writeEmbeddings = async ({
       );
 
       await prisma.$executeRaw`INSERT INTO embedding ("gutenbergBookMetadataId", vector, content) VALUES ${rows}`;
-    } catch (e) {
-      console.error(e);
     }
+  } catch (e) {
+    console.error(e);
   }
 };
 
