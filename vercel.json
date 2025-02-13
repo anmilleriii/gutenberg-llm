@@ -1,6 +1,6 @@
 {
     "functions": {
-        "app/**/*": {
+        "app/(dashboard)/explore/[bookId]/*": {
             "memory": 3009,
             "maxDuration": 300
         }

@@ -24,7 +24,7 @@ export function SearchBooksResultsList({
           key={`${result.title}-${index}`}
           href={`/explore/${result.gutenbergBookId}`}
         >
-          <Card className="min-w-[300px] max-w-[400px] break-inside-avoid-column aspect-video my-10">
+          <Card className="min-w-[300px] max-w-[400px] break-inside-avoid-column aspect-video [&:not(:first-child)]:mt-10 mb-10">
             <CardHeader className="pb-2 gap-6 flex flex-col items-center">
               {result.imageHref && (
                 <Image

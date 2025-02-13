@@ -18,7 +18,6 @@ export function Chat({
   const {
     messages,
     input,
-    error,
     setInput,
     handleInputChange,
     handleSubmit,
@@ -84,7 +83,7 @@ export function Chat({
                   <span className="italic font-light">
                     {isLoading
                       ? `Reading ${title}...`
-                      : error?.message ?? "Something went wrong..."}
+                      : "Something went wrong, please try again."}
                   </span>
                 )}
               </p>
