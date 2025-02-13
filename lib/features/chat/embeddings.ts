@@ -14,6 +14,7 @@ export const writeEmbeddings = async ({
     content: string;
   }[];
 }) => {
+  console.log("writing embeddings");
   const metadata = await prisma.gutenbergBookMetadata.findUniqueOrThrow({
     where: { gutenbergBookId },
   });
@@ -66,6 +67,7 @@ export async function createEmbeddingsForBook({
     return;
   }
 
+  console.log("generating embeddings");
   const embeddings = await generateEmbeddings(content);
 
   if (!embeddings) {
