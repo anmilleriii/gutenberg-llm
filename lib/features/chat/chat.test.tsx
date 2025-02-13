@@ -37,10 +37,10 @@ describe("<Chat />", () => {
 
     expect(screen.queryAllByRole("article")).toHaveLength(0);
 
-    await userEvent.click(screen.getByText("Summarize Crime and Punishment"));
+    await userEvent.click(screen.getByText("Summarize Crime and Punishment."));
 
     expect(await screen.findByRole("article")).toHaveTextContent(
-      "Summarize Crime and Punishment"
+      "Summarize Crime and Punishment."
     );
   });
 });
