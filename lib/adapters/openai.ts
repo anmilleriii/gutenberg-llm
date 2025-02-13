@@ -10,17 +10,31 @@ const generateChunks = (input: string): string[] => {
     .filter((i) => i !== "");
 };
 
+const BATCH_SIZE = 500;
+
 export const generateEmbeddings = async (
   value: string
 ): Promise<Array<{ embedding: number[]; content: string }> | undefined> => {
   const chunks = generateChunks(value);
 
   try {
-    const { embeddings } = await embedMany({
-      model: embeddingModel,
-      values: chunks,
-    });
-    return embeddings.map((e, i) => ({ content: chunks[i], embedding: e }));
+    const results: Array<{ embedding: number[]; content: string }> = [];
+
+    for (let i = 0; i < chunks.length; i += BATCH_SIZE) {
+      const batch = chunks.slice(i, i + BATCH_SIZE);
+      try {
+        const { embeddings } = await embedMany({
+          model: embeddingModel,
+          values: batch,
+        });
+        results.push(
+          ...embeddings.map((e, j) => ({ content: batch[j], embedding: e }))
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return results;
   } catch (e) {
     console.error(e);
   }
