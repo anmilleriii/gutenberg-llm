@@ -1,7 +1,7 @@
 import { getBookContentById } from "@/lib/adapters/gutenberg";
 
-import { BookChatHeader } from "@/lib/features/search/book-detail/book-chat-header";
-import { getGutenbergBookMetadataById } from "@/lib/features/search/search-books-form/queries";
+import { BookHeader } from "@/lib/features/chat/book-header";
+import { getGutenbergBookMetadataById } from "@/lib/features/search/actions";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
 import { notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
@@ -26,7 +26,7 @@ export default async function BookLayout({
 
   return (
     <div className="flex flex-col justify-between min-h-full">
-      <BookChatHeader {...metadata} />
+      <BookHeader {...metadata} />
       {children}
     </div>
   );

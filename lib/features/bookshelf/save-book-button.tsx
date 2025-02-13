@@ -4,7 +4,7 @@ import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Book } from "lucide-react";
 import Link from "next/link";
-import { saveBook } from "./queries";
+import { saveBook } from "./actions";
 
 export function SaveBookButton({
   title,

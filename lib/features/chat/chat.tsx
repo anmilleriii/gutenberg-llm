@@ -1,10 +1,10 @@
 "use client";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
-
 import { cn } from "@/lib/utils/tailwind";
 import { GutenbergBookMetadata } from "@prisma/client";
+import { KeyboardEvent, useEffect } from "react";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useChat } from "ai/react";
 import { useRef } from "react";
@@ -18,6 +18,7 @@ export function Chat({
   const {
     messages,
     input,
+    setInput,
     handleInputChange,
     handleSubmit,
     append,
@@ -28,21 +29,38 @@ export function Chat({
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleClickQuestion = (question: string) => {
-    // setInput(question);
     append({ role: "user", content: question });
   };
 
-  const handleKeyDown = (event: KeyboardEvent) => {
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      if (scrollRef.current) {
+        const scrollViewport = scrollRef.current.querySelector(
+          "[data-radix-scroll-area-viewport]"
+        ) as HTMLDivElement;
+        if (scrollViewport) {
+          scrollViewport.scrollTop = scrollViewport.scrollHeight;
+        }
+      }
+    }, 100);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
+      setInput(event.currentTarget.value);
       handleSubmit(event);
     }
   };
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <>
-      <div className="flex-grow flex flex-col justify-between w-full xl:w-4/5 mx-auto ">
-        <ScrollArea ref={scrollRef} className=" rounded-md  p-4">
+      <div className=" flex flex-col gap-12 justify-between w-full xl:w-3/5 mx-auto py-4 ">
+        <ScrollArea ref={scrollRef} className=" max-h-[700px] px-6 pb-4">
           {messages.map((m) => (
             <div
               key={m.id}
@@ -52,6 +70,7 @@ export function Chat({
               )}
             >
               <p
+                role="article"
                 className={cn(
                   m.role === "user"
                     ? "px-4 py-2  text-muted-foreground rounded-md bg-muted w-fit"
@@ -69,22 +88,22 @@ export function Chat({
             </div>
           ))}
         </ScrollArea>
-        <div className="space-y-4">
+
+        <div className="space-y-4 justify-self-end">
           {!input && !messages.length && (
             <SuggestedQuestions title={title} onClick={handleClickQuestion} />
           )}
-          <form
-            onSubmit={(e) => {
-              handleSubmit(e);
-              // todo
-              scrollRef.current?.scrollTo(0, 0);
-            }}
-          >
+          <form onSubmit={handleSubmit}>
             <Textarea
+              key="chat-input"
+              id="chat-input"
               autoFocus
-              className="pt-4 pb-24 items-start resize-none "
+              className="pt-4 pb-24 items-start resize-none bg-background shadow-md"
               value={input}
-              placeholder={`Ask a question about ${title}`}
+              placeholder={`Ask a question about ${title?.replaceAll(
+                /(\r\n|\n|\r)/gm,
+                ""
+              )}`}
               onKeyDown={handleKeyDown}
               onChange={handleInputChange}
             />

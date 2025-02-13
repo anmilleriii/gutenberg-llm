@@ -1,8 +1,7 @@
 import { getBookContentById } from "@/lib/adapters/gutenberg";
+import { createEmbeddingsForBook } from "@/lib/features/chat/actions/resources";
 import { Chat } from "@/lib/features/chat/chat";
-import { createEmbeddingsForBook } from "@/lib/features/chat/rag/actions/resources";
-
-import { getGutenbergBookMetadataById } from "@/lib/features/search/search-books-form/queries";
+import { getGutenbergBookMetadataById } from "@/lib/features/search/actions";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
 import { notFound } from "next/navigation";
 

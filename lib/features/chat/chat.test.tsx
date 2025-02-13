@@ -1,20 +1,46 @@
-import { generateText } from "ai";
-import { MockLanguageModelV1 } from "ai/test";
+import { mockBookMetadata } from "@/lib/utils/mocks";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { Chat } from "./chat";
 
-const result = await generateText({
-  model: new MockLanguageModelV1({
-    doGenerate: async () => ({
-      rawCall: { rawPrompt: null, rawSettings: {} },
-      finishReason: "stop",
-      usage: { promptTokens: 10, completionTokens: 20 },
-      text: `Hello, world!`,
-    }),
-  }),
-  prompt: "Hello, test!",
-});
+describe("<Chat />", () => {
+  it("asking a question appends the user message to the log", async () => {
+    render(
+      <Chat
+        title={mockBookMetadata.title}
+        gutenbergBookId={mockBookMetadata.gutenbergBookId}
+        content="Test book content"
+      />
+    );
 
-describe("Chat", () => {
-  it("should generate text", async () => {
-    expect(result).toBe("Hello, world!");
+    expect(screen.queryAllByRole("article")).toHaveLength(0);
+
+    await userEvent.type(
+      screen.getByPlaceholderText(/Ask a question about Crime and Punishment/i),
+      "What is this book about?"
+    );
+    await userEvent.keyboard("{Enter}");
+
+    expect(await screen.findByRole("article")).toHaveTextContent(
+      "What is this book about?"
+    );
+  });
+
+  it("clicking on a suggested question appends the user message to the log", async () => {
+    render(
+      <Chat
+        title={mockBookMetadata.title}
+        gutenbergBookId={mockBookMetadata.gutenbergBookId}
+        content="Test book content"
+      />
+    );
+
+    expect(screen.queryAllByRole("article")).toHaveLength(0);
+
+    await userEvent.click(screen.getByText("Summarize Crime and Punishment"));
+
+    expect(await screen.findByRole("article")).toHaveTextContent(
+      "Summarize Crime and Punishment"
+    );
   });
 });

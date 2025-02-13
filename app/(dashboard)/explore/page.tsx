@@ -1,4 +1,4 @@
-import { SearchBooksByTitleForm } from "@/lib/features/search/search-books-form/search-books-by-title";
+import { SearchBooksByTitleForm } from "@/lib/features/search/search-books-by-title";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
 
 export default async function ExplorePage() {

@@ -1,15 +1,13 @@
-"use client";
-
-import { useSession } from "next-auth/react";
+import { auth } from "@/auth";
 import { NavUser } from "./nav-user";
 
-export function AppNavUser() {
-  const { data } = useSession();
+export async function AppNavUser() {
+  const session = await auth();
 
   const user = {
-    name: data?.user?.name,
-    email: data?.user?.email,
-    avatar: data?.user?.image,
+    name: session?.user?.name ?? undefined,
+    email: session?.user?.email ?? undefined,
+    avatar: session?.user?.image ?? undefined,
   };
 
   return <NavUser user={user} />;

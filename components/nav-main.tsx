@@ -1,7 +1,5 @@
 "use client";
 
-import { ChevronRight } from "lucide-react";
-
 import {
   Collapsible,
   CollapsibleContent,
@@ -17,16 +15,23 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import Image from "next/image";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { SidebarItem } from "./app-sidebar";
 
 export function NavMain({ items }: { items: SidebarItem[] }) {
   return (
     <SidebarGroup>
-      <Link href="/explore" className="mb-8">
+      <Link href="/explore" className="mb-4">
         <SidebarHeader className="flex flex-row flex-wrap items-end">
-          <Image src="/gutenberg.webp" alt="logo" width={28} height={28} />
+          <div className="relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/gutenberg.webp"
+              alt="logo"
+              className="object-contain w-[28px] aspect-square"
+            />
+          </div>
           <span className="text-sm text-muted-foreground ">Gutenberg LLM</span>
         </SidebarHeader>
       </Link>

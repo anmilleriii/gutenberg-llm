@@ -13,8 +13,8 @@ import { GutenbergBookMetadata } from "@prisma/client";
 import { Search } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { SearchBooksResultsList } from "../search-books-results-list/search-books-results-list";
-import { queryBooks } from "./queries";
+import { queryBooks } from "./actions";
+import { SearchBooksResultsList } from "./search-books-results-list";
 
 const schema = z.object({
   query: z.string().min(3, "Title or ID must be at least 3 characters"),
@@ -49,7 +49,7 @@ export function SearchBooksByTitleForm({
           onSubmit={methods.handleSubmit(handleSubmit)}
           className={cn("flex flex-col gap-6 ", className)}
         >
-          <Label className="text-lg">
+          <Label className="text-lg font-semibold">
             Search books by author, title, or Gutenberg book ID
           </Label>
           <div className="flex flex-col lg:flex-row items-center gap-10 ">

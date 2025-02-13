@@ -17,9 +17,11 @@ async function main() {
       path.resolve(__dirname, GUTENBERG_BOOK_METADATA_CSV_PATH)
     )
       .pipe(csv.parse({ headers: true }))
-      // @ts-expect-error - any
-      .on("data", (row) =>
-        rows.push({ ...row, gutenbergBookId: parseInt(row.gutenbergBookId) })
+      .on("data", (row: Record<string, unknown>) =>
+        rows.push({
+          ...row,
+          gutenbergBookId: parseInt(row.gutenbergBookId as string),
+        })
       )
       .on("error", reject)
       .on("end", () => resolve(rows));

@@ -11,8 +11,6 @@ import {
   SidebarFooter,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { SessionProvider } from "next-auth/react";
-import { AppNavUser } from "./app-nav-user";
 
 export interface SidebarItem {
   title: string;
@@ -35,29 +33,23 @@ const data = {
   navMain: [
     {
       title: "Explore",
-      url: "/explore",
       icon: Search,
       isActive: true,
       items: [
         {
-          title: "Explore",
+          title: "Search",
           url: "/explore",
         },
       ],
     },
     {
       title: "Bookshelf",
-      url: "/bookshelf",
       icon: LibraryBig,
       isActive: true,
       items: [
         {
           title: "Saved Books",
           url: "/bookshelf",
-        },
-        {
-          title: "History",
-          url: "/history",
         },
       ],
     },
@@ -70,11 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
-        <SessionProvider>
-          <AppNavUser />
-        </SessionProvider>
-      </SidebarFooter>
+      <SidebarFooter>{props.children}</SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

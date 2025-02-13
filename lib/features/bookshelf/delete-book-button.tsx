@@ -3,7 +3,7 @@
 import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { BookX } from "lucide-react";
-import { deleteSavedBook } from "./queries";
+import { deleteSavedBook } from "./actions";
 
 export function DeleteBookButton({
   title,
