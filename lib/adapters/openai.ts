@@ -10,7 +10,7 @@ const generateChunks = (input: string): string[] => {
     .filter((i) => i !== "");
 };
 
-const BATCH_SIZE = 500;
+const BATCH_SIZE = 1500;
 
 export const generateEmbeddings = async (
   value: string
