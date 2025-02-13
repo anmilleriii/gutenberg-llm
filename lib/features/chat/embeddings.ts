@@ -4,6 +4,8 @@ import { generateEmbedding, generateEmbeddings } from "@/lib/adapters/openai";
 import { prisma } from "@/prisma/client";
 import { Prisma } from "@prisma/client";
 
+const BATCH_SIZE = 500;
+
 export const writeEmbeddings = async ({
   gutenbergBookId,
   embeddings,
@@ -18,16 +20,23 @@ export const writeEmbeddings = async ({
     where: { gutenbergBookId },
   });
 
-  const rows = Prisma.join(
-    embeddings.map(
-      (embedding) =>
-        Prisma.sql`(${metadata.id}, ${JSON.stringify(
-          embedding.embedding
-        )}::vector, ${embedding.content})`
-    )
-  );
+  for (let i = 0; i < embeddings.length; i += BATCH_SIZE) {
+    const batch = embeddings.slice(i, i + BATCH_SIZE);
+    try {
+      const rows = Prisma.join(
+        batch.map(
+          (embedding) =>
+            Prisma.sql`(${metadata.id}, ${JSON.stringify(
+              embedding.embedding
+            )}::vector, ${embedding.content})`
+        )
+      );
 
-  await prisma.$executeRaw`INSERT INTO embedding ("gutenbergBookMetadataId", vector, content) VALUES ${rows}`;
+      await prisma.$executeRaw`INSERT INTO embedding ("gutenbergBookMetadataId", vector, content) VALUES ${rows}`;
+    } catch (e) {
+      console.error(e);
+    }
+  }
 };
 
 export const querySimilarContent = async ({
@@ -71,7 +80,6 @@ export async function createEmbeddingsForBook({
   if (!embeddings) {
     return;
   }
-
   await writeEmbeddings({
     gutenbergBookId,
     embeddings,
