@@ -4,7 +4,7 @@ import { generateEmbedding, generateEmbeddings } from "@/lib/adapters/openai";
 import { prisma } from "@/prisma/client";
 import { Prisma } from "@prisma/client";
 
-const BATCH_SIZE = 1500;
+const BATCH_SIZE = 10000;
 
 export const writeEmbeddings = async ({
   gutenbergBookId,
