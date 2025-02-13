@@ -22,9 +22,7 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>;
 
-export function SearchBooksByTitleForm({
-  className,
-}: ComponentPropsWithoutRef<"form">) {
+export function SearchBooks({ className }: ComponentPropsWithoutRef<"form">) {
   const methods = useForm<Schema>({ resolver: zodResolver(schema) });
   const [books, setBooks] = useState<
     GutenbergBookMetadata | GutenbergBookMetadata[] | null

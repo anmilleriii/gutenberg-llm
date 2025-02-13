@@ -18,10 +18,10 @@ export async function queryBooks({
   offset?: number;
   limit?: number;
 }) {
-  const isQueryId = maybeParseQueryToInt(query);
+  const queryId = maybeParseQueryToInt(query);
 
-  if (isQueryId) {
-    return await getGutenbergBookMetadataById(isQueryId);
+  if (!!queryId) {
+    return await getGutenbergBookMetadataById(queryId);
   }
 
   const result = await prisma.gutenbergBookMetadata.findMany({

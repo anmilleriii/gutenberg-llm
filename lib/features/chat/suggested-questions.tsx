@@ -10,7 +10,7 @@ export function SuggestedQuestions({
 }) {
   const suggestedQuestions = [
     `Summarize ${title}.`,
-    "Is this a nonfictional or fictional book?",
+    "Is this a nonfiction or fictional book?",
     "Who are the protagonist and antagonists?",
     "Are there any romantic relationships in the book?",
     "Is this a true story?",
