@@ -1,4 +1,4 @@
-import { querySimilarContent } from "@/lib/features/chat/actions/embeddings";
+import { querySimilarContent } from "@/lib/features/chat/embeddings";
 import { getGutenbergBookMetadataById } from "@/lib/features/search/actions";
 import { groq } from "@ai-sdk/groq";
 import { generateText, streamText, tool } from "ai";
