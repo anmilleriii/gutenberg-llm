@@ -5,8 +5,6 @@ import { getGutenbergBookMetadataById } from "@/lib/features/search/actions";
 import { redirectUnauthenticatedToLogin } from "@/lib/utils/redirect";
 import { notFound } from "next/navigation";
 
-export const maxDuration = 60;
-
 export default async function BookPage({
   params,
 }: {
